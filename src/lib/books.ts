@@ -37,7 +37,7 @@ function normalize(rows: SheetRow[]): Book[] {
 
 function fromGrid(rows: unknown[][]): SheetRow[] {
   const [headers = [], ...values] = rows;
-  const keys = headers.map(String);
+  const keys = headers.map((header) => String(header).replace(/\uFEFF/g, "").trim());
   return values.map((cells) => Object.fromEntries(keys.map((key, index) => [key, String(cells[index] ?? "")])));
 }
 
