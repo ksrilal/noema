@@ -1,5 +1,5 @@
 # NOEMA
-### LAL Literary Collection
+### LĀL Literary Collection
 
 A read-only personal library, dashboard, and insights explorer powered directly by Google Sheets.
 
@@ -50,4 +50,4 @@ Derived tabs like Available, Unavailable and Library Order are not counted again
 ## Technology
 Next.js App Router, TypeScript, React, Recharts, Lucide, Google Sheets API, CSV parser.
 
-© Noema — LAL Literary Collection.
+© Noema — LĀL Literary Collection.
