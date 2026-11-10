@@ -229,7 +229,22 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
       </button>) : <p className="muted-note">No unavailable volumes match the current filters.</p>}
     </div>
   </div>
-</ChartCard><ChartCard title="Language distribution" subtitle="Represented reading languages"><Donut data={languageData} total={filtered.length}/></ChartCard><ChartCard title="Availability breakdown" subtitle="Available, ordered and missing"><Donut data={statusData} total={filtered.length}/></ChartCard><ChartCard title="Top authors" subtitle="Most represented creators"><CategoryBars data={authors.slice(0,8)}/></ChartCard></div>
+</ChartCard><ChartCard title="Language distribution" subtitle="Represented reading languages"><Donut data={languageData} total={filtered.length}/></ChartCard><ChartCard title="Availability breakdown" subtitle="Available, ordered and missing"><Donut data={statusData} total={filtered.length}/></ChartCard><ChartCard title="Top authors" subtitle="Most represented creators"><CategoryBars data={authors.slice(0,8)}/></ChartCard><ChartCard title="Catalogue completeness" subtitle="Metadata coverage across the current selection">
+  <div className="metadata-coverage">
+    {([
+      {label:"Author identified",count:filtered.filter(book => book.author.trim()).length,color:COLORS[0]},
+      {label:"Translator / editor recorded",count:filtered.filter(book => book.translator.trim()).length,color:COLORS[1]},
+      {label:"Romanized search indexed",count:filtered.filter(book => book.romanizedTitle.trim()).length,color:COLORS[3]},
+      {label:"Language specified",count:filtered.filter(book => book.language.trim() && book.language !== "Unspecified").length,color:COLORS[4]},
+      {label:"Medium specified",count:filtered.filter(book => book.medium.trim() && book.medium !== "Unspecified").length,color:COLORS[5]},
+    ]).map(item => <div className="metadata-row" key={item.label}>
+      <div className="metadata-label"><span>{item.label}</span><strong>{pct(item.count,filtered.length)}%</strong></div>
+      <div className="metadata-track"><div style={{width:pct(item.count,filtered.length)+"%",backgroundColor:item.color}}/></div>
+      <small>{compact(item.count)} of {compact(filtered.length)} volumes</small>
+    </div>)}
+    <p className="metadata-hint">Translator / editor details may legitimately be blank for original works. Percentages measure coverage, not errors.</p>
+  </div>
+</ChartCard></div>
           <div className="insight-note"><Sparkles size={20}/><div><strong>Explore interactively</strong><p>Use the filters above to compare a category, language, or availability status. Every chart and metric updates together—your spreadsheet remains unchanged.</p></div></div>
         </> : null}
 
