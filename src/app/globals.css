@@ -113,3 +113,14 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .borrowing-record-main strong{font-size:12px;line-height:1.4;overflow-wrap:anywhere}
 .borrowing-record-date{flex:none;text-align:right}
 @media(max-width:600px){.borrowing-record{align-items:flex-start;flex-direction:column}.borrowing-record-date{text-align:left}}
+
+/* Metadata coverage insight, sixth dashboard panel */
+.metadata-coverage{display:grid;gap:18px;padding:3px 0 6px}
+.metadata-row{display:grid;gap:7px}
+.metadata-label{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--ink);font-size:12px}
+.metadata-label span{overflow-wrap:anywhere}
+.metadata-label strong{font-size:12px;font-variant-numeric:tabular-nums}
+.metadata-track{height:9px;border-radius:999px;background:var(--line);overflow:hidden}
+.metadata-track>div{height:100%;border-radius:999px;transition:width .25s ease}
+.metadata-row small,.metadata-hint{color:var(--muted);font-size:11px}
+.metadata-hint{line-height:1.55;margin:3px 0 0}
