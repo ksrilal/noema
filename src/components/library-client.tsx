@@ -201,11 +201,11 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
           <section className={"literary-hero literary-"+quote.mood} aria-label="Featured literary quotation">
             <div className="literary-glow literary-glow-one"/><div className="literary-glow literary-glow-two"/>
             <div className="literary-hero-inner">
-              <div className="literary-eyebrow"><Sparkles size={15}/> WORDS FROM YOUR SHELVES <span className="literary-count">{String(quoteIndex+1).padStart(2,"0")} / {String(literaryQuotes.length).padStart(2,"0")}</span></div>
-              <div className="literary-quote-mark" aria-hidden="true">“</div>
-              <blockquote className="literary-quote" key={quote.id}>{quote.text}<span aria-hidden="true">”</span></blockquote>
+              <div className="literary-eyebrow">WORDS FROM YOUR SHELVES</div>
+              
+              <blockquote className="literary-quote" key={quote.id}>{quote.text}</blockquote>
               <div className="literary-attribution"><div className="literary-rule"/><div><strong>{quote.work}</strong><span>{quote.author} · {quote.location}</span></div></div>
-              <div className="literary-actions"><button type="button" className="literary-next" onClick={nextQuote}>Another passage <ArrowRight size={18}/></button>{quoteBook ? <button type="button" className="literary-outline" onClick={()=>setSelected(quoteBook)}>Explore this volume <BookOpen size={17}/></button> : null}<a className="literary-source" href={quote.sourceUrl} target="_blank" rel="noopener noreferrer">Verify source <ArrowUpRight size={14}/></a></div>
+              <div className="literary-actions"><button type="button" className="literary-next" onClick={nextQuote}>Another passage <ArrowRight size={18}/></button>{quoteBook ? <button type="button" className="literary-outline" onClick={()=>setSelected(quoteBook)}>Explore this volume <BookOpen size={17}/></button> : null}</div>
             </div>
             <div className="literary-side-text" aria-hidden="true">NOEMA · LĀL LITERARY COLLECTION</div>
           </section>
