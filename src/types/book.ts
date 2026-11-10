@@ -3,6 +3,7 @@ export type Availability = "Available" | "Unavailable" | "Ordered" | string;
 export interface Book {
   id: string;
   title: string;
+  romanizedTitle: string;
   author: string;
   translator: string;
   category: string;
