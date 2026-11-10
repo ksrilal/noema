@@ -19,7 +19,7 @@ function normalize(rows: SheetRow[]): Book[] {
     return [{
       id,
       title,
-      romanizedTitle: String(row["Title (Romanized)"] || "").trim(),
+      romanizedTitle: String(row["Searchable (Romanized)"] || "").trim(),
       author: String(row["Author"] || "").trim(),
       translator: String(row["Translator / Editor"] || "").trim(),
       category: String(row["Category"] || "Uncategorized").trim(),
