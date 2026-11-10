@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Noema | LAL Literary Collection",
-  description: "Explore the LAL Literary Collection: a curated personal archive of books, ideas, and knowledge.",
+  title: "Noema | LĀL Literary Collection",
+  description: "Explore the LĀL Literary Collection: a curated personal archive of books, ideas, and knowledge.",
   robots: { index: false, follow: false },
 };
 
