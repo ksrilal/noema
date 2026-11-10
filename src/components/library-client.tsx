@@ -203,7 +203,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
             <div className="literary-hero-inner">
               <div className="literary-eyebrow">WORDS FROM YOUR SHELVES</div>
               
-              <blockquote className="literary-quote" key={quote.id}>{quote.text}</blockquote>
+              <blockquote className="literary-quote" key={quote.id}><span className="literary-quote-open" aria-hidden="true">“</span>{quote.text}<span className="literary-quote-close" aria-hidden="true">”</span></blockquote>
               <div className="literary-attribution"><div className="literary-rule"/><div><strong>{quote.work}</strong><span>{quote.author} · {quote.location}</span></div></div>
               <div className="literary-actions"><button type="button" className="literary-next" onClick={nextQuote}>Another passage <ArrowRight size={18}/></button>{quoteBook ? <button type="button" className="literary-outline" onClick={()=>setSelected(quoteBook)}>Explore this volume <BookOpen size={17}/></button> : null}</div>
             </div>
