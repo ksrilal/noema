@@ -98,3 +98,18 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .category-comparison-track{height:9px;border-radius:99px;background:var(--line);overflow:hidden}
 .category-comparison-fill{height:100%;border-radius:99px;min-width:2px;transition:width .25s ease}
 @media(max-width:600px){.category-comparison{gap:13px}.category-comparison-label{font-size:11px}}
+
+/* Borrowing insights */
+.borrowing-insights{display:grid;gap:18px}
+.borrowing-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.borrowing-stats>div{background:var(--surface-secondary,var(--surface));border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:5px}
+.borrowing-stats span{color:var(--muted);font-size:11px}
+.borrowing-stats strong{color:var(--ink);font-size:23px;font-variant-numeric:tabular-nums}
+.borrowing-records{max-height:320px;overflow:auto;display:grid;gap:8px}
+.borrowing-record{background:transparent;border:1px solid var(--line);border-radius:9px;color:var(--ink);padding:11px 12px;display:flex;justify-content:space-between;align-items:center;text-align:left;gap:12px;cursor:pointer;font:inherit}
+.borrowing-record:hover{border-color:var(--accent)}
+.borrowing-record-main{display:grid;gap:4px;min-width:0}
+.borrowing-record-main small,.borrowing-record-main>span,.borrowing-record-date{font-size:10px;color:var(--muted)}
+.borrowing-record-main strong{font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.borrowing-record-date{flex:none;text-align:right}
+@media(max-width:600px){.borrowing-record{align-items:flex-start;flex-direction:column}.borrowing-record-date{text-align:left}}
