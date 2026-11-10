@@ -13,6 +13,8 @@ export interface Book {
   language: string;
   availability: Availability;
   availabilityReason: string;
+  borrowedBy: string;
+  borrowedDate: string;
   lastUpdated: string;
   printed: boolean;
 }
