@@ -13,7 +13,7 @@ import {
 } from "recharts";
 import type { Book, LibraryView } from "@/types/book";
 
-const COLORS = ["#536e55", "#b89557", "#a3b5a1", "#788b83", "#d0b9a0", "#798a9d", "#9d877e", "#c2c9b7"];
+const COLORS = ["#8B78E6", "#56B6A6", "#D99B6C", "#719DE2", "#C27DAE", "#A4B96C", "#D3B565", "#8C9EBD"];
 const PAGE_SIZE = 12;
 const nav: { id: LibraryView; label: string; icon: typeof BookOpen }[] = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
@@ -77,9 +77,23 @@ function StatusTag({ value }: { value: string }) {
     <i />{value}
   </span>;
 }
+const COVER_PALETTES = [
+  ["#5B3CC4", "#9875F1"], ["#315D86", "#78A8DA"],
+  ["#1F7778", "#6DC3B7"], ["#975475", "#D99AB8"],
+  ["#835A35", "#D6A66B"], ["#495B9A", "#929FE4"],
+  ["#556A48", "#A3BC80"], ["#7C4F9B", "#BA91D5"],
+  ["#9B555A", "#D88B8F"], ["#396D86", "#7CC3CE"],
+  ["#765C9B", "#AD98DC"], ["#846A46", "#C5AC80"],
+] as const;
+function coverPalette(id: string) {
+  // Stable per-book color, so sorting and filtering never changes its cover.
+  let hash = 0;
+  for (const char of id) hash = (Math.imul(hash, 31) + char.charCodeAt(0)) | 0;
+  return COVER_PALETTES[(hash >>> 0) % COVER_PALETTES.length];
+}
 function BookTile({ book, onClick }: { book: Book; onClick: () => void }) {
   return <button type="button" className="book-tile" onClick={onClick}>
-    <span className="book-cover"><span className="cover-decoration">✦</span><strong>{initial(book.title)}</strong><span className="cover-foot">NOEMA</span></span>
+    <span className="book-cover patterned-cover" style={{ background: `linear-gradient(135deg, ${coverPalette(book.id)[0]}, ${coverPalette(book.id)[1]})` }}><span className="cover-books" aria-hidden="true"><BookOpen size={56} strokeWidth={1.15}/></span><span className="cover-foot">NOEMA</span></span>
     <span className="book-tile-content"><span className="book-id">{book.id}</span><strong className="book-title">{book.title}</strong><span className="book-author">{book.author || "Author not listed"}</span><StatusTag value={book.availability} /></span>
     <ArrowUpRight size={16} className="book-tile-arrow"/>
   </button>;
@@ -156,7 +170,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
       <div className="sidebar-top"><div className="brand-symbol"><BookOpen size={24} strokeWidth={2.2}/></div><div><div className="brand-name">NOEMA</div><div className="brand-subtitle">LAL LITERARY COLLECTION</div></div></div>
       <div className="sidebar-caption">YOUR LIBRARY</div>
       <nav aria-label="Primary navigation">{nav.map(({ id, label, icon: Icon }) => <button key={id} type="button" className={"nav-link " + (view === id ? "nav-link-active" : "")} onClick={() => chooseView(id)}><Icon size={19} strokeWidth={1.7}/><span>{label}</span>{view === id ? <span className="nav-indicator" /> : null}</button>)}</nav>
-      <div className="sidebar-bottom"><div className="sidebar-feature"><span className="feature-icon"><Sparkles size={18}/></span><strong>A collection of ideas.</strong><p>Every volume holds a new perspective.</p></div><div className="sidebar-footer"><span className="live-dot" /> READ-ONLY COLLECTION <span>v1.0</span></div></div>
+      <div className="sidebar-bottom"><div className="sidebar-footer"><span className="live-dot" /> READ-ONLY COLLECTION <span>v1.0</span></div></div>
     </aside>
     {sidebarOpen ? <button className="mobile-scrim" aria-label="Close menu" onClick={() => setSidebarOpen(false)} /> : null}
     <main className="main">
@@ -171,7 +185,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
           <div className="select-wrap"><select aria-label="Filter by availability" value={availability} onChange={(e) => { setAvailability(e.target.value); setPage(1); }}><option>All statuses</option>{statuses.map((x) => <option key={x}>{x}</option>)}</select><ChevronDown size={15}/></div>
           {activeFilters ? <button type="button" className="clear-button" onClick={clear}><X size={15}/> Clear</button> : null}
         </section>
-        <div className="result-strip"><span><SlidersHorizontal size={15}/> Showing <strong>{compact(filtered.length)}</strong> of <strong>{compact(books.length)}</strong> volumes</span><span>Source: Google Sheets · Books tab</span></div>
+        <div className="result-strip"><span><SlidersHorizontal size={15}/> Showing <strong>{compact(filtered.length)}</strong> of <strong>{compact(books.length)}</strong> volumes</span></div>
 
         {view === "overview" ? <>
           <div className="kpi-grid">
