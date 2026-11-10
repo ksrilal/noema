@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Activity, ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, BookCopy,
   BookMarked, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight,
   CircleHelp, Filter, LayoutDashboard, LibraryBig, Menu, Search, SlidersHorizontal,
-  Sparkles, UsersRound, X,
+  Sparkles, UsersRound, X, Grid2X2, List, Sun, Moon, Monitor,
 } from "lucide-react";
 import {
   Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
@@ -91,6 +91,27 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Book | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [catalogueMode, setCatalogueMode] = useState<"grid" | "list">("grid");
+  const [theme, setTheme] = useState<"system" | "light" | "dark">("system");
+  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  useEffect(() => {
+    const saved = window.localStorage.getItem("noema-theme");
+    if (saved === "light" || saved === "dark" || saved === "system") setTheme(saved);
+    const savedMode = window.localStorage.getItem("noema-catalogue-mode");
+    if (savedMode === "grid" || savedMode === "list") setCatalogueMode(savedMode);
+  }, []);
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const apply = () => { document.documentElement.dataset.theme = theme === "system" ? (media.matches ? "dark" : "light") : theme; };
+    apply();
+    media.addEventListener("change", apply);
+    window.localStorage.setItem("noema-theme", theme);
+    return () => media.removeEventListener("change", apply);
+  }, [theme]);
+  const chooseCatalogueMode = (mode: "grid" | "list") => {
+    setCatalogueMode(mode);
+    window.localStorage.setItem("noema-catalogue-mode", mode);
+  };
 
   const categories = useMemo(() => tally(books, "category").map((x) => x.name), [books]);
   const languages = useMemo(() => tally(books, "language").map((x) => x.name), [books]);
@@ -119,14 +140,14 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
 
   return <div className="app-shell">
     <aside className={"sidebar " + (sidebarOpen ? "sidebar-open" : "")}>
-      <div className="sidebar-top"><div className="brand-symbol">N<span>.</span></div><div><div className="brand-name">NOEMA</div><div className="brand-subtitle">LAL LITERARY COLLECTION</div></div></div>
+      <div className="sidebar-top"><div className="brand-symbol"><BookOpen size={24} strokeWidth={2.2}/></div><div><div className="brand-name">NOEMA</div><div className="brand-subtitle">LAL LITERARY COLLECTION</div></div></div>
       <div className="sidebar-caption">YOUR LIBRARY</div>
       <nav aria-label="Primary navigation">{nav.map(({ id, label, icon: Icon }) => <button key={id} type="button" className={"nav-link " + (view === id ? "nav-link-active" : "")} onClick={() => chooseView(id)}><Icon size={19} strokeWidth={1.7}/><span>{label}</span>{view === id ? <span className="nav-indicator" /> : null}</button>)}</nav>
       <div className="sidebar-bottom"><div className="sidebar-feature"><span className="feature-icon"><Sparkles size={18}/></span><strong>A collection of ideas.</strong><p>Every volume holds a new perspective.</p></div><div className="sidebar-footer"><span className="live-dot" /> READ-ONLY COLLECTION <span>v1.0</span></div></div>
     </aside>
     {sidebarOpen ? <button className="mobile-scrim" aria-label="Close menu" onClick={() => setSidebarOpen(false)} /> : null}
     <main className="main">
-      <header className="topbar"><button className="menu-toggle icon-button" aria-label="Open navigation" onClick={() => setSidebarOpen(true)}><Menu size={22}/></button><div className="breadcrumb">Collection <ChevronRight size={14}/><span>{nav.find((n) => n.id === view)?.label}</span></div><div className="topbar-right"><span className="readonly-pill"><Check size={14}/> Read-only sync</span><div className="avatar">L</div></div></header>
+      <header className="topbar"><button className="menu-toggle icon-button" aria-label="Open navigation" onClick={() => setSidebarOpen(true)}><Menu size={22}/></button><div className="breadcrumb">Collection <ChevronRight size={14}/><span>{nav.find((n) => n.id === view)?.label}</span></div><div className="topbar-right"><div className="theme-control"><button type="button" className="theme-trigger" aria-label="Select color theme" aria-expanded={themeMenuOpen} onClick={() => setThemeMenuOpen(!themeMenuOpen)}>{theme === "light" ? <Sun size={18}/> : theme === "dark" ? <Moon size={18}/> : <Monitor size={18}/>}<span>{theme === "system" ? "System" : theme === "dark" ? "Dark" : "Light"}</span><ChevronDown size={14}/></button>{themeMenuOpen ? <div className="theme-menu" role="group" aria-label="Color theme">{([["system","System",Monitor],["light","Light",Sun],["dark","Dark",Moon]] as const).map(([value,label,Icon])=><button type="button" key={value} className={theme === value ? "theme-option selected" : "theme-option"} onClick={()=>{setTheme(value);setThemeMenuOpen(false);}}><Icon size={16}/>{label}{theme === value ? <Check size={14}/> : null}</button>)}</div> : null}</div><span className="readonly-pill"><Check size={14}/> Read-only sync</span><div className="avatar">L</div></div></header>
       <div className="page">
         <div className="intro"><div><div className="eyebrow"><span className="eyebrow-line"/> THE ART OF COLLECTING KNOWLEDGE</div><h1>{view === "overview" ? <>Your library, <em>illuminated.</em></> : view === "catalogue" ? <>The <em>catalogue.</em></> : view === "insights" ? <>Beyond the <em>numbers.</em></> : <>The <em>authors.</em></>}</h1><p>{subtitle}</p></div><div className="intro-mark"><LibraryBig size={28} strokeWidth={1.2}/></div></div>
         {error ? <div role="alert" className="setup-notice"><CircleHelp size={21}/><div><strong>Connect the Google Sheet to bring Noema to life</strong><p>{error} Check the repository README for the two supported read-only connection methods.</p></div></div> : null}
@@ -157,8 +178,8 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
         </> : null}
 
         {view === "catalogue" ? <>
-          <div className="section-heading catalogue-heading"><div><span className="section-kicker">THE ARCHIVE</span><h2>{filtered.length} curated volumes</h2></div><span className="muted-note">Click a book to view its details</span></div>
-          {filtered.length ? <><div className="book-grid catalogue-grid">{shownBooks.map((book)=><BookTile key={book.id} book={book} onClick={() => setSelected(book)}/>)}</div><div className="pagination"><span>Page {page} of {pages}</span><div><button aria-label="Previous page" disabled={page===1} onClick={()=>setPage((p)=>Math.max(1,p-1))}><ChevronLeft size={18}/></button><button aria-label="Next page" disabled={page>=pages} onClick={()=>setPage((p)=>Math.min(pages,p+1))}><ChevronRight size={18}/></button></div></div></> : <EmptyState title="No books found" description="Try a broader search or clear the active filters."/>}
+          <div className="section-heading catalogue-heading"><div><span className="section-kicker">THE ARCHIVE</span><h2>{filtered.length} curated volumes</h2></div><div className="catalogue-actions"><span className="muted-note">Click a book to view its details</span><div className="view-switch" role="group" aria-label="Catalogue layout"><button type="button" aria-label="Grid view" aria-pressed={catalogueMode === "grid"} className={catalogueMode === "grid" ? "active" : ""} onClick={()=>chooseCatalogueMode("grid")}><Grid2X2 size={17}/></button><button type="button" aria-label="List view" aria-pressed={catalogueMode === "list"} className={catalogueMode === "list" ? "active" : ""} onClick={()=>chooseCatalogueMode("list")}><List size={18}/></button></div></div></div>
+          {filtered.length ? <>catalogueMode === "grid" ? <div className="book-grid catalogue-grid">{shownBooks.map((book)=><BookTile key={book.id} book={book} onClick={() => setSelected(book)}/>)}</div> : <div className="catalogue-list"><div className="list-head"><span>BOOK</span><span>AUTHOR</span><span>CATEGORY</span><span>STATUS</span><span></span></div>{shownBooks.map(book=><button type="button" key={book.id} className="list-book" onClick={()=>setSelected(book)}><span className="list-book-primary"><span className="list-book-icon"><BookOpen size={19}/></span><span><strong>{book.title}</strong><small>{book.id} · {book.language}</small></span></span><span className="list-author">{book.author || "Not specified"}</span><span className="list-category">{book.category}</span><span><StatusTag value={book.availability}/></span><ArrowUpRight size={17}/></button>)}</div><div className="pagination"><span>Page {page} of {pages}</span><div><button aria-label="Previous page" disabled={page===1} onClick={()=>setPage((p)=>Math.max(1,p-1))}><ChevronLeft size={18}/></button><button aria-label="Next page" disabled={page>=pages} onClick={()=>setPage((p)=>Math.min(pages,p+1))}><ChevronRight size={18}/></button></div></div></> : <EmptyState title="No books found" description="Try a broader search or clear the active filters."/>}
         </> : null}
 
         {view === "insights" ? <>
