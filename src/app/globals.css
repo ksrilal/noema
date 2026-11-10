@@ -133,3 +133,7 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 
 /* Quieter, idea-first quotation presentation */
 .literary-hero-inner{max-width:810px}.literary-eyebrow{font-size:11px;letter-spacing:2.1px;color:#e8d4e2;margin-bottom:45px}.literary-quote{font-size:clamp(32px,4.15vw,60px);line-height:1.27;max-width:810px;letter-spacing:-.6px;margin-bottom:42px}.literary-attribution{margin-bottom:35px}.literary-actions{gap:13px}.literary-hero{min-height:500px}.literary-count,.literary-quote-mark,.literary-source{display:none!important}@media(max-width:720px){.literary-eyebrow{margin-bottom:34px}.literary-quote{font-size:clamp(29px,7vw,42px)}}
+
+/* Inline opening and closing quotation marks */
+.literary-quote-open,.literary-quote-close{display:inline!important;color:#e8c5a5;font-family:Georgia,serif;font-weight:400;opacity:.9}
+.literary-quote-open{margin-right:.11em}.literary-quote-close{margin-left:.07em}
