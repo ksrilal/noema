@@ -12,10 +12,12 @@ import {
   Tooltip, XAxis, YAxis,
 } from "recharts";
 import type { Book, LibraryView } from "@/types/book";
+import { literaryQuotes } from "@/data/quotes";
 
 const COLORS = ["#8B78E6", "#56B6A6", "#D99B6C", "#719DE2", "#C27DAE", "#A4B96C", "#D3B565", "#8C9EBD"];
 const PAGE_SIZE = 12;
 const nav: { id: LibraryView; label: string; icon: typeof BookOpen }[] = [
+  { id: "home", label: "Home", icon: Sparkles },
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "catalogue", label: "Book catalogue", icon: BookOpen },
   { id: "insights", label: "Collection insights", icon: BarChart3 },
@@ -100,8 +102,9 @@ function BookTile({ book, onClick }: { book: Book; onClick: () => void }) {
 }
 
 export function LibraryClient({ books, error }: { books: Book[]; error: string | null }) {
-  const [view, setView] = useState<LibraryView>("overview");
+  const [view, setView] = useState<LibraryView>("home");
   const [query, setQuery] = useState("");
+  const [quoteIndex, setQuoteIndex] = useState(0);
   const [category, setCategory] = useState("All categories");
   const [language, setLanguage] = useState("All languages");
   const [availability, setAvailability] = useState("All statuses");
@@ -111,6 +114,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
   const [catalogueMode, setCatalogueMode] = useState<"grid" | "list">("grid");
   const [theme, setTheme] = useState<"system" | "light" | "dark">("system");
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  useEffect(() => { setQuoteIndex(Math.floor(Math.random() * literaryQuotes.length)); }, []);
   useEffect(() => {
     const saved = window.localStorage.getItem("noema-theme");
     if (saved === "light" || saved === "dark" || saved === "system") setTheme(saved);
@@ -166,7 +170,10 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
   const chooseView = (next: LibraryView) => { setView(next); setSidebarOpen(false); setPage(1); };
   const bookCount = (status: string) => filtered.filter((b) => b.availability.toLowerCase() === status).length;
   const uniqueSubcategories = new Set(filtered.map((b) => b.subcategory).filter(Boolean)).size;
-  const subtitle = ({ overview: "A living portrait of your personal library.", catalogue: "Every book, thoughtfully catalogued.", insights: "Discover the patterns behind your collection.", authors: "The voices that shape your shelves." } as Record<LibraryView, string>)[view];
+  const quote = literaryQuotes[quoteIndex % literaryQuotes.length];
+  const quoteBook = books.find(book => book.id === quote.bookId);
+  const nextQuote = () => setQuoteIndex(index => (index + 1 + Math.floor(Math.random() * (literaryQuotes.length - 1))) % literaryQuotes.length);
+  const subtitle = ({ home: "A place where every page opens a new world.", overview: "A living portrait of your personal library.", catalogue: "Every book, thoughtfully catalogued.", insights: "Discover the patterns behind your collection.", authors: "The voices that shape your shelves." } as Record<LibraryView, string>)[view];
 
   return <div className="app-shell">
     <aside className={"sidebar " + (sidebarOpen ? "sidebar-open" : "")}>
@@ -179,16 +186,31 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
     <main className="main">
       <header className="topbar"><button className="menu-toggle icon-button" aria-label="Open navigation" onClick={() => setSidebarOpen(true)}><Menu size={22}/></button><div className="breadcrumb">Collection <ChevronRight size={14}/><span>{nav.find((n) => n.id === view)?.label}</span></div><div className="topbar-right"><div className="theme-control"><button type="button" className="theme-trigger" aria-label="Select color theme" aria-expanded={themeMenuOpen} onClick={() => setThemeMenuOpen(!themeMenuOpen)}>{theme === "light" ? <Sun size={18}/> : theme === "dark" ? <Moon size={18}/> : <Monitor size={18}/>}<span>{theme === "system" ? "System" : theme === "dark" ? "Dark" : "Light"}</span><ChevronDown size={14}/></button>{themeMenuOpen ? <div className="theme-menu" role="group" aria-label="Color theme">{([["system","System",Monitor],["light","Light",Sun],["dark","Dark",Moon]] as const).map(([value,label,Icon])=><button type="button" key={value} className={theme === value ? "theme-option selected" : "theme-option"} onClick={()=>{setTheme(value);setThemeMenuOpen(false);}}><Icon size={16}/>{label}{theme === value ? <Check size={14}/> : null}</button>)}</div> : null}</div><span className="readonly-pill"><Check size={14}/> Read-only sync</span><div className="avatar">L</div></div></header>
       <div className="page">
-        <div className="intro"><div><div className="eyebrow"><span className="eyebrow-line"/> THE ART OF COLLECTING KNOWLEDGE</div><h1>{view === "overview" ? <>Your library, <em>illuminated.</em></> : view === "catalogue" ? <>The <em>catalogue.</em></> : view === "insights" ? <>Beyond the <em>numbers.</em></> : <>The <em>authors.</em></>}</h1><p>{subtitle}</p></div><div className="intro-mark"><LibraryBig size={28} strokeWidth={1.2}/></div></div>
+        <div className="intro"><div><div className="eyebrow"><span className="eyebrow-line"/> THE ART OF COLLECTING KNOWLEDGE</div><h1>{view === "home" ? <>Where words <em>remain.</em></> : view === "overview" ? <>Your library, <em>illuminated.</em></> : view === "catalogue" ? <>The <em>catalogue.</em></> : view === "insights" ? <>Beyond the <em>numbers.</em></> : <>The <em>authors.</em></>}</h1><p>{subtitle}</p></div><div className="intro-mark"><LibraryBig size={28} strokeWidth={1.2}/></div></div>
         {error ? <div role="alert" className="setup-notice"><CircleHelp size={21}/><div><strong>Connect the Google Sheet to bring Noema to life</strong><p>{error} Check the repository README for the two supported read-only connection methods.</p></div></div> : null}
-        <section className="filter-panel" aria-label="Library filters">
+        {view !== "home" ? <section className="filter-panel" aria-label="Library filters">
           <div className="search-wrap"><Search size={18}/><input aria-label="Search books" placeholder="Search title, author, translator, editor or book ID…" value={query} onChange={(e) => { setQuery(e.target.value); setPage(1); }}/></div>
           <div className="select-wrap"><Filter size={16}/><select aria-label="Filter by category" value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }}><option>All categories</option>{categories.map((x) => <option key={x}>{x}</option>)}</select><ChevronDown size={15}/></div>
           <div className="select-wrap"><select aria-label="Filter by language" value={language} onChange={(e) => { setLanguage(e.target.value); setPage(1); }}><option>All languages</option>{languages.map((x) => <option key={x}>{x}</option>)}</select><ChevronDown size={15}/></div>
           <div className="select-wrap"><select aria-label="Filter by availability" value={availability} onChange={(e) => { setAvailability(e.target.value); setPage(1); }}><option>All statuses</option>{statuses.map((x) => <option key={x}>{x}</option>)}</select><ChevronDown size={15}/></div>
           {activeFilters ? <button type="button" className="clear-button" onClick={clear}><X size={15}/> Clear</button> : null}
-        </section>
-        <div className="result-strip"><span><SlidersHorizontal size={15}/> Showing <strong>{compact(filtered.length)}</strong> of <strong>{compact(books.length)}</strong> volumes</span></div>
+        </section> : null}
+        {view !== "home" ? <div className="result-strip"><span><SlidersHorizontal size={15}/> Showing <strong>{compact(filtered.length)}</strong> of <strong>{compact(books.length)}</strong> volumes</span></div> : null}
+
+        {view === "home" ? <>
+          <section className={"literary-hero literary-"+quote.mood} aria-label="Featured literary quotation">
+            <div className="literary-glow literary-glow-one"/><div className="literary-glow literary-glow-two"/>
+            <div className="literary-hero-inner">
+              <div className="literary-eyebrow"><Sparkles size={15}/> WORDS FROM YOUR SHELVES <span className="literary-count">{String(quoteIndex+1).padStart(2,"0")} / {String(literaryQuotes.length).padStart(2,"0")}</span></div>
+              <div className="literary-quote-mark" aria-hidden="true">“</div>
+              <blockquote className="literary-quote" key={quote.id}>{quote.text}<span aria-hidden="true">”</span></blockquote>
+              <div className="literary-attribution"><div className="literary-rule"/><div><strong>{quote.work}</strong><span>{quote.author} · {quote.location}</span></div></div>
+              <div className="literary-actions"><button type="button" className="literary-next" onClick={nextQuote}>Another passage <ArrowRight size={18}/></button>{quoteBook ? <button type="button" className="literary-outline" onClick={()=>setSelected(quoteBook)}>Explore this volume <BookOpen size={17}/></button> : null}<a className="literary-source" href={quote.sourceUrl} target="_blank" rel="noopener noreferrer">Verify source <ArrowUpRight size={14}/></a></div>
+            </div>
+            <div className="literary-side-text" aria-hidden="true">NOEMA · LĀL LITERARY COLLECTION</div>
+          </section>
+          <div className="literary-bottom"><div><span className="section-kicker">A PERSONAL ARCHIVE</span><h2>More than a collection.<br/><em>A world of thought.</em></h2><p>Discover the books, voices and ideas that live on your shelves. Each featured passage is checked against a published text and linked to its source.</p><button className="literary-browse" type="button" onClick={()=>chooseView("catalogue")}>Explore {compact(books.length)} volumes <ArrowRight size={17}/></button></div><div className="literary-bottom-stats"><div><strong>{compact(books.length)}</strong><span>Catalogued volumes</span></div><div><strong>{compact(totalAuthors)}</strong><span>Distinct authors</span></div><div><strong>{literaryQuotes.length}</strong><span>Verified passages</span></div></div></div>
+        </> : null}
 
         {view === "overview" ? <>
           <div className="kpi-grid">
