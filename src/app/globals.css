@@ -88,3 +88,13 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .cover-books{position:relative;z-index:3;display:grid;place-items:center;width:94px;height:94px;border-radius:50%;background:#ffffff17;border:1px solid #ffffff45;backdrop-filter:blur(3px);box-shadow:0 9px 24px #1a12302e}
 .book-cover.patterned-cover .cover-foot{z-index:3;color:#fff;font-family:Inter,'Noto Sans Sinhala',sans-serif;font-weight:700;letter-spacing:2.2px}
 .sidebar-bottom{padding-top:10px}
+
+/* Insights category comparison: readable full labels at every viewport width. */
+.category-comparison{display:grid;gap:15px;padding:4px 0 8px;width:100%;min-width:0}
+.category-comparison-row{min-width:0}
+.category-comparison-label{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:7px;color:var(--ink);font-size:12px;line-height:1.4}
+.category-comparison-label span{min-width:0;overflow-wrap:anywhere;font-weight:550}
+.category-comparison-label strong{font-size:12px;font-variant-numeric:tabular-nums;color:var(--ink);flex:none}
+.category-comparison-track{height:9px;border-radius:99px;background:var(--line);overflow:hidden}
+.category-comparison-fill{height:100%;border-radius:99px;min-width:2px;transition:width .25s ease}
+@media(max-width:600px){.category-comparison{gap:13px}.category-comparison-label{font-size:11px}}
