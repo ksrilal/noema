@@ -200,6 +200,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
         {view === "home" ? <>
           <section className={"literary-hero literary-"+quote.mood} aria-label="Featured literary quotation">
             <div className="literary-glow literary-glow-one"/><div className="literary-glow literary-glow-two"/>
+            <div className="literary-book-art" aria-hidden="true"><div className="literary-book-aura"/><div className="literary-floating-glyph glyph-one">✧</div><div className="literary-floating-glyph glyph-two">✦</div><div className="literary-floating-glyph glyph-three">·</div><div className="literary-book"><div className="literary-book-shadow"/><div className="literary-book-cover left-cover"/><div className="literary-book-cover right-cover"/><div className="literary-book-page page-left"/><div className="literary-book-page page-right"/><div className="literary-book-page page-turn-one"/><div className="literary-book-page page-turn-two"/><div className="literary-book-spine"/></div></div>
             <div className="literary-hero-inner">
               <div className="literary-eyebrow">WORDS FROM YOUR SHELVES</div>
               
@@ -209,7 +210,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
             </div>
             <div className="literary-side-text" aria-hidden="true">NOEMA · LĀL LITERARY COLLECTION</div>
           </section>
-          <div className="literary-bottom"><div><span className="section-kicker">A PERSONAL ARCHIVE</span><h2>More than a collection.<br/><em>A world of thought.</em></h2><p>Discover the books, voices and ideas that live on your shelves. Explore the books, voices and ideas that live on your shelves, with selected literary passages and reflections from across the collection.</p><button className="literary-browse" type="button" onClick={()=>chooseView("catalogue")}>Explore {compact(books.length)} volumes <ArrowRight size={17}/></button></div><div className="literary-bottom-stats"><div><strong>{compact(books.length)}</strong><span>Catalogued volumes</span></div><div><strong>{compact(totalAuthors)}</strong><span>Distinct authors</span></div><div><strong>{compact(books.filter(book => book.availability.trim().toLowerCase() === "available").length)}</strong><span>Available volumes</span></div></div></div>
+          <div className="literary-bottom"><div><span className="section-kicker">A PERSONAL ARCHIVE</span><h2>More than a collection.<br/><em>A world of thought.</em></h2><p>Discover the books, voices and ideas that live on your shelves, with selected literary passages from across the collection.</p><button className="literary-browse" type="button" onClick={()=>chooseView("catalogue")}>Explore {compact(books.length)} volumes <ArrowRight size={17}/></button></div><div className="literary-bottom-stats"><div><strong>{compact(books.length)}</strong><span>Catalogued volumes</span></div><div><strong>{compact(totalAuthors)}</strong><span>Distinct authors</span></div><div><strong>{compact(books.filter(book => book.availability.trim().toLowerCase() === "available").length)}</strong><span>Available volumes</span></div></div></div>
         </> : null}
 
         {view === "overview" ? <>
