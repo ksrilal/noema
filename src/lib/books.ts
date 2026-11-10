@@ -5,7 +5,6 @@ import type { Book } from "@/types/book";
 
 const SHEET_ID = process.env.GOOGLE_SHEET_ID || "1DJh1-MP2RIXr5XUHTGtN_umeGI79egAJnjvX8a4fi1o";
 const SHEET_TAB = process.env.GOOGLE_SHEET_TAB || "Books";
-const CACHE_SECONDS = 600;
 
 type SheetRow = Record<string, string | undefined>;
 
@@ -56,7 +55,7 @@ async function readPrivateSheet(): Promise<Book[]> {
   const url = "https://sheets.googleapis.com/v4/spreadsheets/" + encodeURIComponent(SHEET_ID) + "/values/" + range;
   const response = await fetch(url, {
     headers: { Authorization: "Bearer " + token },
-    next: { revalidate: CACHE_SECONDS },
+    cache: "no-store",
   });
   if (!response.ok) throw new Error("Google Sheets API returned " + response.status);
   const result = (await response.json()) as { values?: unknown[][] };
@@ -67,7 +66,7 @@ async function readPublicSheet(): Promise<Book[]> {
   const url = process.env.SHEETS_PUBLIC_CSV_URL ||
     "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(SHEET_ID) +
     "/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent(SHEET_TAB);
-  const response = await fetch(url, { next: { revalidate: CACHE_SECONDS } });
+  const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) throw new Error("Public sheet returned " + response.status);
   const csv = await response.text();
   if (!csv.includes("Book ID") || !csv.includes("Title (Sinhala)")) {
