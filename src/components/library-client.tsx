@@ -31,6 +31,9 @@ function tally(books: Book[], field: keyof Book) {
   return [...counts].map(([name, value]) => ({ name, value }))
     .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name));
 }
+function normalizeSearch(value: string) {
+  return value.toLocaleLowerCase().normalize("NFKC").replace(/[\p{P}\p{S}\s]+/gu, "");
+}
 function compact(value: number) { return new Intl.NumberFormat("en-US").format(value); }
 function shortLabel(text: string, limit = 22) { return text.length > limit ? text.slice(0, limit - 1) + "…" : text; }
 function initial(text: string) { return (text.trim()[0] || "B").toUpperCase(); }
@@ -117,8 +120,8 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
   const languages = useMemo(() => tally(books, "language").map((x) => x.name), [books]);
   const statuses = useMemo(() => tally(books, "availability").map((x) => x.name), [books]);
   const filtered = useMemo(() => books.filter((book) => {
-    const term = query.trim().toLocaleLowerCase();
-    const haystack = [book.id, book.title, book.author, book.translator, book.category, book.subcategory, book.subject].join(" ").toLocaleLowerCase();
+    const term = normalizeSearch(query.trim());
+    const haystack = normalizeSearch([book.id, book.title, book.romanizedTitle, book.author, book.translator, book.category, book.subcategory, book.subject].join(" "));
     return (!term || haystack.includes(term)) &&
       (category === "All categories" || category === book.category) &&
       (language === "All languages" || language === book.language) &&
