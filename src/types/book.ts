@@ -19,4 +19,4 @@ export interface Book {
   printed: boolean;
 }
 
-export type LibraryView = "overview" | "catalogue" | "insights" | "authors";
+export type LibraryView = "home" | "overview" | "catalogue" | "insights" | "authors";
