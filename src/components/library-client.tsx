@@ -121,8 +121,18 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
   const statuses = useMemo(() => tally(books, "availability").map((x) => x.name), [books]);
   const filtered = useMemo(() => books.filter((book) => {
     const term = normalizeSearch(query.trim());
-    const haystack = normalizeSearch([book.id, book.title, book.romanizedTitle, book.author, book.translator, book.category, book.subcategory, book.subject].join(" "));
-    return (!term || haystack.includes(term)) &&
+    // Search each original field and every Romanized alias independently.
+    // Tokenized matching lets "martin madol" find a title by its author and title.
+    const searchableFields = [
+      book.id, book.title, book.author, book.translator,
+      book.category, book.subcategory, book.subject,
+      ...book.romanizedTitle.split("|"),
+    ].map(normalizeSearch).filter(Boolean);
+    const words = query.trim().split(/\s+/).map(normalizeSearch).filter(Boolean);
+    const joined = normalizeSearch(searchableFields.join(" "));
+    const matches = !term || searchableFields.some(field => field.includes(term)) ||
+      joined.includes(term) || words.every(word => searchableFields.some(field => field.includes(word)));
+    return matches &&
       (category === "All categories" || category === book.category) &&
       (language === "All languages" || language === book.language) &&
       (availability === "All statuses" || availability === book.availability);
@@ -155,7 +165,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
         <div className="intro"><div><div className="eyebrow"><span className="eyebrow-line"/> THE ART OF COLLECTING KNOWLEDGE</div><h1>{view === "overview" ? <>Your library, <em>illuminated.</em></> : view === "catalogue" ? <>The <em>catalogue.</em></> : view === "insights" ? <>Beyond the <em>numbers.</em></> : <>The <em>authors.</em></>}</h1><p>{subtitle}</p></div><div className="intro-mark"><LibraryBig size={28} strokeWidth={1.2}/></div></div>
         {error ? <div role="alert" className="setup-notice"><CircleHelp size={21}/><div><strong>Connect the Google Sheet to bring Noema to life</strong><p>{error} Check the repository README for the two supported read-only connection methods.</p></div></div> : null}
         <section className="filter-panel" aria-label="Library filters">
-          <div className="search-wrap"><Search size={18}/><input aria-label="Search books" placeholder="Search title, author, subject or book ID…" value={query} onChange={(e) => { setQuery(e.target.value); setPage(1); }}/></div>
+          <div className="search-wrap"><Search size={18}/><input aria-label="Search books" placeholder="Search title, author, translator, editor or book ID…" value={query} onChange={(e) => { setQuery(e.target.value); setPage(1); }}/></div>
           <div className="select-wrap"><Filter size={16}/><select aria-label="Filter by category" value={category} onChange={(e) => { setCategory(e.target.value); setPage(1); }}><option>All categories</option>{categories.map((x) => <option key={x}>{x}</option>)}</select><ChevronDown size={15}/></div>
           <div className="select-wrap"><select aria-label="Filter by language" value={language} onChange={(e) => { setLanguage(e.target.value); setPage(1); }}><option>All languages</option>{languages.map((x) => <option key={x}>{x}</option>)}</select><ChevronDown size={15}/></div>
           <div className="select-wrap"><select aria-label="Filter by availability" value={availability} onChange={(e) => { setAvailability(e.target.value); setPage(1); }}><option>All statuses</option>{statuses.map((x) => <option key={x}>{x}</option>)}</select><ChevronDown size={15}/></div>
