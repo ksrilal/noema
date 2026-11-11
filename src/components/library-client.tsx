@@ -5,7 +5,7 @@ import {
   Activity, ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, BookCopy,
   BookMarked, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight,
   CircleHelp, Filter, LayoutDashboard, LibraryBig, Menu, Search, SlidersHorizontal,
-  Sparkles, UsersRound, X, Grid2X2, List, Sun, Moon, Monitor, Bookmark, ExternalLink, Maximize2, Minimize2,
+  Sparkles, UsersRound, X, Grid2X2, List, Sun, Moon, Monitor, ExternalLink, Maximize2, Minimize2,
 } from "lucide-react";
 import {
   Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
