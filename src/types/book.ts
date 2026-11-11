@@ -17,6 +17,9 @@ export interface Book {
   borrowedDate: string;
   lastUpdated: string;
   printed: boolean;
+  driveLink?: string;
+  driveId?: string;
+  format?: string;
 }
 
-export type LibraryView = "home" | "overview" | "catalogue" | "insights" | "authors";
+export type LibraryView = "home" | "overview" | "catalogue" | "rack" | "ebooks" | "insights" | "authors";
