@@ -23,9 +23,9 @@ const nav: { id: LibraryView; label: string; icon: typeof BookOpen }[] = [
   { id: "ebooks", label: "Ebooks", icon: BookMarked },
 ];
 const sectionNav = [
+  { id: "collection" as const, label: "Collection", icon: BookOpen },
   { id: "overview" as const, label: "Overview", icon: LayoutDashboard },
   { id: "insights" as const, label: "Insights", icon: BarChart3 },
-  { id: "collection" as const, label: "Collection", icon: BookOpen },
   { id: "authors" as const, label: "Authors", icon: UsersRound },
 ];
 
@@ -181,9 +181,9 @@ export function LibraryClient({ books, ebooks = [], error }: { books: Book[]; eb
   const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const activeFilters = query !== "" || category !== "All categories" || language !== "All languages" || availability !== "All statuses";
   const clear = () => { setQuery(""); setCategory("All categories"); setLanguage("All languages"); setAvailability("All statuses"); setPage(1); };
-  const chooseView = (next: LibraryView) => { if(next === "rack" || next === "ebooks"){setSection(next);setExpanded(next);} setView(next); setSidebarOpen(false); setPage(1); setQuery(""); setCategory("All categories"); setLanguage("All languages"); setAvailability("All statuses"); };
+  const chooseView = (next: LibraryView) => { if(next === "rack" || next === "ebooks"){setSection(next);setExpanded(next);} setView(next === "rack" || next === "ebooks" ? "collection" : next); setSidebarOpen(false); setPage(1); setQuery(""); setCategory("All categories"); setLanguage("All languages"); setAvailability("All statuses"); };
   const chooseSectionPage = (parent: "rack" | "ebooks", next: "overview" | "insights" | "collection" | "authors") => { setSection(parent); setExpanded(parent); chooseView(next); };
-  const activeSection = view === "rack" || view === "ebooks" ? view : ["overview", "insights", "authors"].includes(view) ? section : null;
+  const activeSection = view === "rack" || view === "ebooks" ? view : ["collection", "overview", "insights", "authors"].includes(view) ? section : null;
   const toggleBookmark = (id: string) => setBookmarks(current => { const next = current.includes(id) ? current.filter(x => x !== id) : [...current,id]; window.localStorage.setItem("noema-bookmarks",JSON.stringify(next)); return next; });
   const setReadingProgress = (id: string, value: number) => setProgress(current => { const next = {...current,[id]:value}; window.localStorage.setItem("noema-reading-progress",JSON.stringify(next)); return next; });
   const bookCount = (status: string) => filtered.filter((b) => b.availability.toLowerCase() === status).length;
@@ -197,7 +197,7 @@ export function LibraryClient({ books, ebooks = [], error }: { books: Book[]; eb
     <aside className={"sidebar " + (sidebarOpen ? "sidebar-open" : "")}>
       <div className="sidebar-top"><div className="brand-symbol"><BookOpen size={24} strokeWidth={2.2}/></div><div><div className="brand-name">NOEMA</div><div className="brand-subtitle">LĀL LITERARY COLLECTION</div></div></div>
       <div className="sidebar-caption">YOUR LIBRARY</div>
-      <nav aria-label="Primary navigation">{nav.map(({ id, label, icon: Icon }) => <div key={id} className="nav-group"><button type="button" className={"nav-link " + ((view === id || activeSection === id) ? "nav-link-active" : "")} onClick={() => {if(id === "rack" || id === "ebooks"){const parent=id; if(expanded===parent && activeSection===parent){setExpanded(null);}else{chooseView(parent);}}else{setExpanded(null);chooseView(id);}}}><Icon size={19} strokeWidth={1.7}/><span>{label}</span>{id === "rack" || id === "ebooks" ? <ChevronDown size={15} className={"nav-chevron "+(expanded===id?"nav-chevron-open":"")}/> : null}{(view === id || activeSection === id) ? <span className="nav-indicator" /> : null}</button>{(id === "rack" || id === "ebooks") && expanded === id ? <div className="nav-submenu">{sectionNav.map(({id:child,label:childLabel,icon:ChildIcon})=><button type="button" key={child} className={"nav-sublink "+(view===child && section===id?"nav-sublink-active":"")} onClick={()=>chooseSectionPage(id,child)}><ChildIcon size={16}/><span>{childLabel}</span></button>)}</div> : null}</div>)}</nav>
+      <nav aria-label="Primary navigation">{nav.map(({ id, label, icon: Icon }) => <div key={id} className="nav-group"><button type="button" className={"nav-link " + ((view === id || activeSection === id) ? "nav-link-active" : "")} onClick={() => {if(id === "rack" || id === "ebooks"){const parent=id; chooseView(parent);}else{setExpanded(null);chooseView(id);}}}><Icon size={19} strokeWidth={1.7}/><span>{label}</span>{id === "rack" || id === "ebooks" ? <ChevronDown size={15} className={"nav-chevron "+(expanded===id?"nav-chevron-open":"")}/> : null}{(view === id || activeSection === id) ? <span className="nav-indicator" /> : null}</button>{(id === "rack" || id === "ebooks") && expanded === id ? <div className="nav-submenu">{sectionNav.map(({id:child,label:childLabel,icon:ChildIcon})=><button type="button" key={child} className={"nav-sublink "+(view===child && section===id?"nav-sublink-active":"")} onClick={()=>chooseSectionPage(id,child)}><ChildIcon size={16}/><span>{childLabel}</span></button>)}</div> : null}</div>)}</nav>
       <div className="sidebar-bottom"><div className="sidebar-footer"><span className="live-dot" /> READ-ONLY COLLECTION <span>v1.0</span></div></div>
     </aside>
     {sidebarOpen ? <button className="mobile-scrim" aria-label="Close menu" onClick={() => setSidebarOpen(false)} /> : null}
