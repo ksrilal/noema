@@ -5,7 +5,7 @@ import {
   Activity, ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, BookCopy,
   BookMarked, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight,
   CircleHelp, Filter, LayoutDashboard, LibraryBig, Menu, Search, SlidersHorizontal,
-  Sparkles, UsersRound, X, Grid2X2, List, Sun, Moon, Monitor,
+  Sparkles, UsersRound, X, Grid2X2, List, Sun, Moon, Monitor, Bookmark, ExternalLink, Maximize2, Minimize2,
 } from "lucide-react";
 import {
   Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer,
@@ -19,7 +19,9 @@ const PAGE_SIZE = 12;
 const nav: { id: LibraryView; label: string; icon: typeof BookOpen }[] = [
   { id: "home", label: "Home", icon: Sparkles },
   { id: "overview", label: "Overview", icon: LayoutDashboard },
-  { id: "catalogue", label: "Book catalogue", icon: BookOpen },
+  { id: "catalogue", label: "Books", icon: BookOpen },
+  { id: "rack", label: "Book Rack", icon: LibraryBig },
+  { id: "ebooks", label: "Ebooks", icon: BookMarked },
   { id: "insights", label: "Collection insights", icon: BarChart3 },
   { id: "authors", label: "Author explorer", icon: UsersRound },
 ];
@@ -96,13 +98,19 @@ function coverPalette(id: string) {
 function BookTile({ book, onClick }: { book: Book; onClick: () => void }) {
   return <button type="button" className="book-tile" onClick={onClick}>
     <span className="book-cover patterned-cover" style={{ background: `linear-gradient(135deg, ${coverPalette(book.id)[0]}, ${coverPalette(book.id)[1]})` }}><span className="cover-books" aria-hidden="true"><BookOpen size={56} strokeWidth={1.15}/></span><span className="cover-foot">NOEMA</span></span>
-    <span className="book-tile-content"><span className="book-id">{book.id}</span><strong className="book-title">{book.title}</strong><span className="book-author">{book.author || "Author not listed"}</span><StatusTag value={book.availability} /></span>
+    <span className="book-tile-content"><span className="book-id">{book.id} · {book.driveLink ? book.format || "Ebook" : "Physical"}</span><strong className="book-title">{book.title}</strong><span className="book-author">{book.author || "Author not listed"}</span><StatusTag value={book.availability} /></span>
     <ArrowUpRight size={16} className="book-tile-arrow"/>
   </button>;
 }
 
-export function LibraryClient({ books, error }: { books: Book[]; error: string | null }) {
+export function LibraryClient({ books, ebooks = [], error }: { books: Book[]; ebooks?: Book[]; error: string | null }) {
   const [view, setView] = useState<LibraryView>("home");
+  const [reading, setReading] = useState<Book | null>(null);
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const [progress, setProgress] = useState<Record<string, number>>({});
+  const [readerFullscreen, setReaderFullscreen] = useState(false);
+  const allBooks = useMemo(() => [...books, ...ebooks], [books, ebooks]);
+  const visibleBooks = view === "ebooks" ? ebooks : view === "catalogue" ? allBooks : books;
   const [query, setQuery] = useState("");
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [category, setCategory] = useState("All categories");
@@ -120,6 +128,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
     if (saved === "light" || saved === "dark" || saved === "system") setTheme(saved);
     const savedMode = window.localStorage.getItem("noema-catalogue-mode");
     if (savedMode === "grid" || savedMode === "list") setCatalogueMode(savedMode);
+    try { setBookmarks(JSON.parse(window.localStorage.getItem("noema-bookmarks") || "[]")); setProgress(JSON.parse(window.localStorage.getItem("noema-reading-progress") || "{}")); } catch { /* reset invalid local state */ }
   }, []);
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -134,10 +143,10 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
     window.localStorage.setItem("noema-catalogue-mode", mode);
   };
 
-  const categories = useMemo(() => tally(books, "category").map((x) => x.name), [books]);
-  const languages = useMemo(() => tally(books, "language").map((x) => x.name), [books]);
-  const statuses = useMemo(() => tally(books, "availability").map((x) => x.name), [books]);
-  const filtered = useMemo(() => books.filter((book) => {
+  const categories = useMemo(() => tally(visibleBooks, "category").map((x) => x.name), [visibleBooks]);
+  const languages = useMemo(() => tally(visibleBooks, "language").map((x) => x.name), [visibleBooks]);
+  const statuses = useMemo(() => tally(visibleBooks, "availability").map((x) => x.name), [visibleBooks]);
+  const filtered = useMemo(() => visibleBooks.filter((book) => {
     const term = normalizeSearch(query.trim());
     // Search each original field and every Romanized alias independently.
     // Tokenized matching lets "martin madol" find a title by its author and title.
@@ -154,7 +163,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
       (category === "All categories" || category === book.category) &&
       (language === "All languages" || language === book.language) &&
       (availability === "All statuses" || availability === book.availability);
-  }), [books, query, category, language, availability]);
+  }), [visibleBooks, query, category, language, availability]);
   const categoryData = useMemo(() => tally(filtered, "category"), [filtered]);
   const languageData = useMemo(() => tally(filtered, "language"), [filtered]);
   const statusData = useMemo(() => tally(filtered, "availability"), [filtered]);
@@ -167,13 +176,15 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
   const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const activeFilters = query !== "" || category !== "All categories" || language !== "All languages" || availability !== "All statuses";
   const clear = () => { setQuery(""); setCategory("All categories"); setLanguage("All languages"); setAvailability("All statuses"); setPage(1); };
-  const chooseView = (next: LibraryView) => { setView(next); setSidebarOpen(false); setPage(1); };
+  const chooseView = (next: LibraryView) => { setView(next); setSidebarOpen(false); setPage(1); setQuery(""); setCategory("All categories"); setLanguage("All languages"); setAvailability("All statuses"); };
+  const toggleBookmark = (id: string) => setBookmarks(current => { const next = current.includes(id) ? current.filter(x => x !== id) : [...current,id]; window.localStorage.setItem("noema-bookmarks",JSON.stringify(next)); return next; });
+  const setReadingProgress = (id: string, value: number) => setProgress(current => { const next = {...current,[id]:value}; window.localStorage.setItem("noema-reading-progress",JSON.stringify(next)); return next; });
   const bookCount = (status: string) => filtered.filter((b) => b.availability.toLowerCase() === status).length;
   const uniqueSubcategories = new Set(filtered.map((b) => b.subcategory).filter(Boolean)).size;
   const quote = literaryQuotes[quoteIndex % literaryQuotes.length];
-  const quoteBook = books.find(book => book.id === quote.bookId);
+  const quoteBook = allBooks.find(book => book.id === quote.bookId);
   const nextQuote = () => setQuoteIndex(index => (index + 1 + Math.floor(Math.random() * (literaryQuotes.length - 1))) % literaryQuotes.length);
-  const subtitle = ({ home: "A place where every page opens a new world.", overview: "A living portrait of your personal library.", catalogue: "Every book, thoughtfully catalogued.", insights: "Discover the patterns behind your collection.", authors: "The voices that shape your shelves." } as Record<LibraryView, string>)[view];
+  const subtitle = ({ rack: "Your physical collection and its stories.", ebooks: "Your digital shelves, ready to explore.", home: "A place where every page opens a new world.", overview: "A living portrait of your personal library.", catalogue: "Every format, one thoughtful collection.", insights: "Discover the patterns behind your collection.", authors: "The voices that shape your shelves." } as Record<LibraryView, string>)[view];
 
   return <div className="app-shell">
     <aside className={"sidebar " + (sidebarOpen ? "sidebar-open" : "")}>
@@ -186,7 +197,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
     <main className="main">
       <header className="topbar"><button className="menu-toggle icon-button" aria-label="Open navigation" onClick={() => setSidebarOpen(true)}><Menu size={22}/></button><div className="breadcrumb">Collection <ChevronRight size={14}/><span>{nav.find((n) => n.id === view)?.label}</span></div><div className="topbar-right"><div className="theme-control"><button type="button" className="theme-trigger" aria-label="Select color theme" aria-expanded={themeMenuOpen} onClick={() => setThemeMenuOpen(!themeMenuOpen)}>{theme === "light" ? <Sun size={18}/> : theme === "dark" ? <Moon size={18}/> : <Monitor size={18}/>}<span>{theme === "system" ? "System" : theme === "dark" ? "Dark" : "Light"}</span><ChevronDown size={14}/></button>{themeMenuOpen ? <div className="theme-menu" role="group" aria-label="Color theme">{([["system","System",Monitor],["light","Light",Sun],["dark","Dark",Moon]] as const).map(([value,label,Icon])=><button type="button" key={value} className={theme === value ? "theme-option selected" : "theme-option"} onClick={()=>{setTheme(value);setThemeMenuOpen(false);}}><Icon size={16}/>{label}{theme === value ? <Check size={14}/> : null}</button>)}</div> : null}</div><div className="avatar">L</div></div></header>
       <div className="page">
-        <div className="intro"><div><div className="eyebrow"><span className="eyebrow-line"/> THE ART OF COLLECTING KNOWLEDGE</div><h1>{view === "home" ? <>Where words <em>remain.</em></> : view === "overview" ? <>Your library, <em>illuminated.</em></> : view === "catalogue" ? <>The <em>catalogue.</em></> : view === "insights" ? <>Beyond the <em>numbers.</em></> : <>The <em>authors.</em></>}</h1><p>{subtitle}</p></div><div className="intro-mark"><LibraryBig size={28} strokeWidth={1.2}/></div></div>
+        <div className="intro"><div><div className="eyebrow"><span className="eyebrow-line"/> THE ART OF COLLECTING KNOWLEDGE</div><h1>{view === "home" ? <>Where words <em>remain.</em></> : view === "overview" ? <>Your library, <em>illuminated.</em></> : view === "catalogue" ? <>All <em>books.</em></> : view === "rack" ? <>Your <em>book rack.</em></> : view === "ebooks" ? <>Digital <em>library.</em></> : view === "insights" ? <>Beyond the <em>numbers.</em></> : <>The <em>authors.</em></>}</h1><p>{subtitle}</p></div><div className="intro-mark"><LibraryBig size={28} strokeWidth={1.2}/></div></div>
         {error ? <div role="alert" className="setup-notice"><CircleHelp size={21}/><div><strong>Your collection is temporarily unavailable</strong><p>Please try again later.</p></div></div> : null}
         {view !== "home" ? <section className="filter-panel" aria-label="Library filters">
           <div className="search-wrap"><Search size={18}/><input aria-label="Search books" placeholder="Search title, author, translator, editor or book ID…" value={query} onChange={(e) => { setQuery(e.target.value); setPage(1); }}/></div>
@@ -195,7 +206,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
           <div className="select-wrap"><select aria-label="Filter by availability" value={availability} onChange={(e) => { setAvailability(e.target.value); setPage(1); }}><option>All statuses</option>{statuses.map((x) => <option key={x}>{x}</option>)}</select><ChevronDown size={15}/></div>
           {activeFilters ? <button type="button" className="clear-button" onClick={clear}><X size={15}/> Clear</button> : null}
         </section> : null}
-        {view !== "home" ? <div className="result-strip"><span><SlidersHorizontal size={15}/> Showing <strong>{compact(filtered.length)}</strong> of <strong>{compact(books.length)}</strong> volumes</span></div> : null}
+        {view !== "home" ? <div className="result-strip"><span><SlidersHorizontal size={15}/> Showing <strong>{compact(filtered.length)}</strong> of <strong>{compact(visibleBooks.length)}</strong> volumes</span></div> : null}
 
         {view === "home" ? <>
           <section className={"literary-hero literary-"+quote.mood} aria-label="Featured literary quotation">
@@ -210,7 +221,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
             </div>
             <div className="literary-side-text" aria-hidden="true">NOEMA · LĀL LITERARY COLLECTION</div>
           </section>
-          <div className="literary-bottom"><div><span className="section-kicker">A PERSONAL ARCHIVE</span><h2>More than a collection.<br/><em>A world of thought.</em></h2><p>Discover the books, voices and ideas that live on your shelves, with selected literary passages from across the collection.</p><button className="literary-browse" type="button" onClick={()=>chooseView("catalogue")}>Explore {compact(books.length)} volumes <ArrowRight size={17}/></button></div><div className="literary-bottom-stats"><div><strong>{compact(books.length)}</strong><span>Catalogued volumes</span></div><div><strong>{compact(totalAuthors)}</strong><span>Distinct authors</span></div><div><strong>{compact(books.filter(book => book.availability.trim().toLowerCase() === "available").length)}</strong><span>Available volumes</span></div></div></div>
+          <div className="literary-bottom"><div><span className="section-kicker">A PERSONAL ARCHIVE</span><h2>More than a collection.<br/><em>A world of thought.</em></h2><p>Discover the books, voices and ideas that live on your shelves, with selected literary passages from across the collection.</p><button className="literary-browse" type="button" onClick={()=>chooseView("catalogue")}>Explore {compact(allBooks.length)} volumes <ArrowRight size={17}/></button></div><div className="literary-bottom-stats"><div><strong>{compact(books.length)}</strong><span>Physical volumes</span></div><div><strong>{compact(ebooks.length)}</strong><span>Digital volumes</span></div><div><strong>{compact(books.filter(book => book.availability.trim().toLowerCase() === "available").length)}</strong><span>Available volumes</span></div></div></div>
         </> : null}
 
         {view === "overview" ? <>
@@ -230,8 +241,8 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
           {filtered.length ? <div className="book-grid">{filtered.slice(0,4).map((book)=><BookTile key={book.id} book={book} onClick={() => setSelected(book)}/>)}</div> : <EmptyState title="Your library awaits" description="Try changing your filters to discover more books."/>}
         </> : null}
 
-        {view === "catalogue" ? <>
-          <div className="section-heading catalogue-heading"><div><span className="section-kicker">THE ARCHIVE</span><h2>{filtered.length} curated volumes</h2></div><div className="catalogue-actions"><span className="muted-note">Click a book to view its details</span><div className="view-switch" role="group" aria-label="Catalogue layout"><button type="button" aria-label="Grid view" aria-pressed={catalogueMode === "grid"} className={catalogueMode === "grid" ? "active" : ""} onClick={()=>chooseCatalogueMode("grid")}><Grid2X2 size={17}/></button><button type="button" aria-label="List view" aria-pressed={catalogueMode === "list"} className={catalogueMode === "list" ? "active" : ""} onClick={()=>chooseCatalogueMode("list")}><List size={18}/></button></div></div></div>
+        {(view === "catalogue" || view === "rack" || view === "ebooks") ? <>
+          <div className="section-heading catalogue-heading"><div><span className="section-kicker">THE ARCHIVE</span><h2>{filtered.length} curated volumes</h2></div><div className="catalogue-actions"><span className="muted-note">Select a volume to explore or read</span><div className="view-switch" role="group" aria-label="Catalogue layout"><button type="button" aria-label="Grid view" aria-pressed={catalogueMode === "grid"} className={catalogueMode === "grid" ? "active" : ""} onClick={()=>chooseCatalogueMode("grid")}><Grid2X2 size={17}/></button><button type="button" aria-label="List view" aria-pressed={catalogueMode === "list"} className={catalogueMode === "list" ? "active" : ""} onClick={()=>chooseCatalogueMode("list")}><List size={18}/></button></div></div></div>
           {filtered.length ? <>{catalogueMode === "grid" ? <div className="book-grid catalogue-grid">{shownBooks.map((book)=><BookTile key={book.id} book={book} onClick={() => setSelected(book)}/>)}</div> : <div className="catalogue-list"><div className="list-head"><span>BOOK</span><span>AUTHOR</span><span>CATEGORY</span><span>STATUS</span><span></span></div>{shownBooks.map(book=><button type="button" key={book.id} className="list-book" onClick={()=>setSelected(book)}><span className="list-book-primary"><span className="list-book-icon"><BookOpen size={19}/></span><span><strong>{book.title}</strong><small>{book.id} · {book.language}</small></span></span><span className="list-author">{book.author || "Not specified"}</span><span className="list-category">{book.category}</span><span><StatusTag value={book.availability}/></span><ArrowUpRight size={17}/></button>)}</div>}<div className="pagination"><span>Page {page} of {pages}</span><div><button aria-label="Previous page" disabled={page===1} onClick={()=>setPage((p)=>Math.max(1,p-1))}><ChevronLeft size={18}/></button><button aria-label="Next page" disabled={page>=pages} onClick={()=>setPage((p)=>Math.min(pages,p+1))}><ChevronRight size={18}/></button></div></div></> : <EmptyState title="No books found" description="Try a broader search or clear the active filters."/>}
         </> : null}
 
@@ -275,6 +286,7 @@ export function LibraryClient({ books, error }: { books: Book[]; error: string |
         <footer className="site-footer"><span>© NOEMA · LĀL Literary Collection</span><span>Read only. Thoughtfully curated.</span></footer>
       </div>
     </main>
-    {selected ? <div className="modal-layer" role="presentation" onMouseDown={(event)=>{if(event.target===event.currentTarget)setSelected(null);}}><section className="book-dialog" role="dialog" aria-modal="true" aria-label={"Book details: "+selected.title}><div className="dialog-top"><span>VOLUME DETAILS · {selected.id}</span><button className="icon-button" aria-label="Close book details" onClick={()=>setSelected(null)}><X size={19}/></button></div><div className="dialog-cover"><BookOpen size={48} strokeWidth={1.1}/><span>NOEMA COLLECTION</span></div><h2>{selected.title}</h2><p className="dialog-author">{selected.author || "Author not listed"}</p><StatusTag value={selected.availability}/><div className="book-facts">{([["Category",selected.category],["Subcategory",selected.subcategory],["Subject",selected.subject],["Translator / Editor",selected.translator],["Language",selected.language],["Medium",selected.medium],["Availability reason",selected.availabilityReason],...(selected.availability.toLowerCase() === "unavailable" ? [["Borrowed by",selected.borrowedBy || "Unknown"],["Borrowed date",selected.borrowedDate || "Unknown"]] as [string,string][] : []),["Last updated",selected.lastUpdated]] as const).filter((x)=>x[1]).map(([label,value])=><div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div></section></div> : null}
+    {reading ? <div className={"reader-layer " + (readerFullscreen ? "reader-fullscreen" : "")} role="dialog" aria-modal="true" aria-label={"Reading "+reading.title}><div className="reader-toolbar"><div><small>NOEMA READER · {reading.id}</small><strong>{reading.title}</strong></div><div className="reader-actions"><button title="Bookmark" aria-label="Toggle bookmark" onClick={()=>toggleBookmark(reading.id)}><Bookmark size={18} fill={bookmarks.includes(reading.id)?"currentColor":"none"}/></button><a title="Open original" target="_blank" rel="noopener noreferrer" href={reading.driveLink}><ExternalLink size={18}/></a><button aria-label="Toggle reader size" onClick={()=>setReaderFullscreen(!readerFullscreen)}>{readerFullscreen?<Minimize2 size={18}/>:<Maximize2 size={18}/>}</button><button aria-label="Close reader" onClick={()=>{setReading(null);setReaderFullscreen(false);}}><X size={19}/></button></div></div><div className="reader-body">{reading.format === "PDF" && reading.driveId ? <iframe title={"Reading "+reading.title} src={"https://drive.google.com/file/d/"+encodeURIComponent(reading.driveId)+"/preview"} allow="autoplay" referrerPolicy="no-referrer"/> : <div className="reader-fallback"><BookOpen size={54}/><h2>Open this EPUB in Google Drive</h2><p>In-browser EPUB rendering requires a downloadable file endpoint. Your original ebook is available through the link below.</p><a href={reading.driveLink} target="_blank" rel="noopener noreferrer">Open ebook <ExternalLink size={16}/></a></div>}</div><div className="reader-footer"><span>Reading position (manual)</span><input aria-label="Reading progress percentage" type="range" min="0" max="100" value={progress[reading.id]||0} onChange={e=>setReadingProgress(reading.id,Number(e.target.value))}/><strong>{progress[reading.id]||0}%</strong><span>Saved on this device</span></div></div> : null}
+    {selected ? <div className="modal-layer" role="presentation" onMouseDown={(event)=>{if(event.target===event.currentTarget)setSelected(null);}}><section className="book-dialog" role="dialog" aria-modal="true" aria-label={"Book details: "+selected.title}><div className="dialog-top"><span>VOLUME DETAILS · {selected.id}</span><button className="icon-button" aria-label="Close book details" onClick={()=>setSelected(null)}><X size={19}/></button></div><div className="dialog-cover"><BookOpen size={48} strokeWidth={1.1}/><span>NOEMA COLLECTION</span></div><h2>{selected.title}</h2><p className="dialog-author">{selected.author || "Author not listed"}</p><StatusTag value={selected.availability}/>{selected.driveLink ? <div className="ebook-dialog-actions"><button type="button" onClick={()=>{setReading(selected);setSelected(null);}}>Read ebook <BookOpen size={17}/></button><button type="button" onClick={()=>toggleBookmark(selected.id)}><Bookmark size={16} fill={bookmarks.includes(selected.id)?"currentColor":"none"}/>{bookmarks.includes(selected.id)?"Bookmarked":"Bookmark"}</button><a href={selected.driveLink} target="_blank" rel="noopener noreferrer">Open in Drive <ExternalLink size={16}/></a></div> : null}<div className="book-facts">{([["Category",selected.category],["Subcategory",selected.subcategory],["Subject",selected.subject],["Translator / Editor",selected.translator],["Language",selected.language],["Medium",selected.medium],["Format",selected.format || ""],["Availability reason",selected.availabilityReason],...(selected.availability.toLowerCase() === "unavailable" ? [["Borrowed by",selected.borrowedBy || "Unknown"],["Borrowed date",selected.borrowedDate || "Unknown"]] as [string,string][] : []),["Last updated",selected.lastUpdated]] as const).filter((x)=>x[1]).map(([label,value])=><div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div></section></div> : null}
   </div>;
 }
