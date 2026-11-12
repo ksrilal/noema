@@ -299,3 +299,11 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .vs-close{position:absolute;right:-12px;top:-16px;z-index:3;display:grid;place-items:center;width:39px;height:39px;background:#f5e6d3;color:#3c2926;border:1px solid #bba087;border-radius:50%;cursor:pointer}
 @media(max-width:700px){.vs-cabinet{border-width:8px}.vs-open-book{grid-template-columns:1fr;overflow-y:auto;min-height:0;max-height:90vh}.vs-book-cover{min-height:230px;border-radius:14px 14px 3px 3px;border-right:9px solid var(--cover-accent);gap:9px;padding:20px}.vs-book-cover svg{width:36px}.vs-book-pages{min-height:350px;border-radius:3px 3px 14px 14px;padding:26px 23px 48px}.vs-focused-scroll{min-height:300px}.vs-focus-top{flex-wrap:wrap}.vs-focus-top span{order:-1;width:100%;text-align:center}.collection-tabs{width:100%}.collection-tabs button{flex:1;justify-content:center;padding:10px;font-size:12px}}
 @media(prefers-reduced-motion:reduce){.vs-spine,.vs-open-book,.vs-book-cover,.vs-focused-books{transition:none!important}.vs-open-book{transform:none}.vs-book-cover{transform:none}}
+
+/* Fill each cabinet shelf edge-to-edge on wide screens while retaining varied spines. */
+.vs-shelf-viewport{overflow-x:auto;scrollbar-width:thin}
+.vs-shelf-viewport .vs-shelf-books{width:100%;min-width:100%;max-width:none;gap:2px}
+.vs-shelf-viewport .vs-spine{flex-grow:1;flex-shrink:0}
+@media(min-width:850px){
+  .vs-shelf-viewport .vs-spine{flex-shrink:1;min-width:20px}
+}
