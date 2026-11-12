@@ -617,3 +617,15 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .origin-globe-label{position:absolute;bottom:22px;left:0;right:0;text-align:center;font-family:Georgia,serif;font-size:clamp(12px,1.7vw,19px);letter-spacing:.13em;color:#edcf8f;pointer-events:none}
 .origin-globe-sr{position:absolute;left:-9999px}
 @media(max-width:640px){.origin-globe-shell{min-height:390px}.origin-globe-canvas{height:390px}.origin-globe-hint{font-size:10px;max-width:60%}.origin-globe-controls{right:10px;top:10px}.origin-globe-controls button{width:32px;height:32px}.origin-globe-label{bottom:14px;letter-spacing:.05em}}
+
+/* Low-memory literary atlas: static SVG, no animation loop */
+.origin-flat-shell{position:relative;overflow:hidden;border:1px solid #9b7646;border-radius:18px;background:radial-gradient(#16364d,#07101f);padding:14px 12px 20px}
+.origin-flat-viewport{overflow:hidden;border-radius:12px;background:#071b2c}
+.origin-flat-viewport svg{display:block;width:100%;height:auto;transition:transform .18s ease;transform-origin:center}
+.origin-flat-pin{cursor:pointer;outline:none}
+.origin-flat-pin:hover,.origin-flat-pin:focus{filter:drop-shadow(0 0 6px #ffe7aa)}
+.origin-flat-controls{position:absolute;z-index:2;top:22px;right:20px;display:flex;gap:6px}
+.origin-flat-controls button{display:grid;place-items:center;width:34px;height:34px;border:1px solid #d4b478;border-radius:8px;background:#111d31e8;color:#f4d7a0;cursor:pointer}
+.origin-flat-caption{text-align:center;margin-top:13px;font-family:Georgia,serif;color:#e6c48b;letter-spacing:.14em;font-size:clamp(12px,1.5vw,17px)}
+.origin-flat-note{text-align:center;color:#b9b1a6;font-size:11px;margin-top:8px}
+@media(max-width:650px){.origin-flat-shell{padding:7px 5px 14px}.origin-flat-controls{right:8px;top:10px}.origin-flat-controls button{width:29px;height:29px}.origin-flat-caption{letter-spacing:.04em}}
