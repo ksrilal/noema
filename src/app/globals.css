@@ -344,3 +344,24 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 @keyframes vs-librarian-fetch{0%{transform:translateX(0) scale(1)}45%{transform:translateX(25px) scale(.9)}100%{transform:translateX(0) scale(1.05)}}
 @media(max-width:600px){.vs-librarian-panel{grid-template-columns:70px minmax(0,1fr);gap:10px;padding:12px}.vs-librarian-character{transform:scale(.68);transform-origin:center}.vs-librarian-content h3{font-size:16px}.vs-librarian-results button{flex-basis:155px}}
 @media(prefers-reduced-motion:reduce){.vs-librarian-panel,.vs-librarian-character,.vs-librarian-arm{animation:none!important}}
+
+/* Original grey-robed fantasy librarian, inspired by classic high-fantasy wizards. */
+.vs-librarian-panel{grid-template-columns:155px minmax(0,1fr);background:radial-gradient(ellipse at 8% 40%,#73618055,transparent 40%),linear-gradient(110deg,#252333,#43352f);border-color:#bda98b66}
+.vs-wizard{position:relative;width:148px;height:190px;align-self:end;filter:drop-shadow(0 10px 10px #0005);animation:vs-wizard-arrive .8s cubic-bezier(.2,.8,.3,1) both}
+.vs-wizard svg{width:100%;height:100%;overflow:visible;animation:vs-wizard-breathe 4s ease-in-out infinite}
+.vs-wizard-staff{transform-origin:142px 205px;animation:vs-wizard-staff 4s ease-in-out infinite}
+.vs-wizard-glow{animation:vs-wizard-light 2.7s ease-in-out infinite}
+.vs-wizard-held-book{transform-origin:105px 193px;animation:vs-wizard-book 3.8s ease-in-out infinite}
+.vs-wizard-spark{position:absolute;color:#ffe3aa;text-shadow:0 0 12px #e8bdff;animation:vs-wizard-sparkle 3s ease-in-out infinite}
+.vs-wizard-spark.spark-a{top:7%;right:2%;font-size:16px}
+.vs-wizard-spark.spark-b{top:33%;left:4%;font-size:13px;animation-delay:1.3s}
+.vs-librarian-fetching .vs-wizard{animation:vs-wizard-fetch .85s ease-in-out both}
+@keyframes vs-wizard-arrive{from{opacity:0;transform:translateX(-45px) scale(.92)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes vs-wizard-breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes vs-wizard-staff{0%,100%{transform:rotate(0)}50%{transform:rotate(-3deg)}}
+@keyframes vs-wizard-light{0%,100%{opacity:.5;transform:scale(.85);transform-origin:145px 20px}50%{opacity:1;transform:scale(1.15);transform-origin:145px 20px}}
+@keyframes vs-wizard-book{0%,100%{transform:rotate(0)}50%{transform:rotate(-4deg)}}
+@keyframes vs-wizard-sparkle{0%,100%{opacity:.15;transform:translateY(6px) scale(.75)}50%{opacity:1;transform:translateY(-6px) scale(1.2)}}
+@keyframes vs-wizard-fetch{0%{transform:translateX(0) scale(1)}40%{transform:translateX(28px) scale(.94)}100%{transform:translateX(0) scale(1.05)}}
+@media(max-width:600px){.vs-librarian-panel{grid-template-columns:95px minmax(0,1fr)}.vs-wizard{width:94px;height:145px}}
+@media(prefers-reduced-motion:reduce){.vs-wizard,.vs-wizard svg,.vs-wizard-staff,.vs-wizard-glow,.vs-wizard-held-book,.vs-wizard-spark{animation:none!important}}
