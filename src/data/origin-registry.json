@@ -1,0 +1,264 @@
+{
+  "schemaVersion": 1,
+  "description": "Curated original-work candidates, not verified catalogue matches. Do not infer origin from translation language, author nationality, genre, or subject.",
+  "sourcesPolicy": "Review catalogue title, creator and original work against linked bibliographic source before upgrading a bookId to verified.",
+  "verifiedBooks": {},
+  "workCandidates": [
+    {
+      "workId": "odyssey",
+      "originalWork": "The Odyssey",
+      "creator": "Homer",
+      "historicalOrigin": "Ancient Greece",
+      "modernCountry": "Greece",
+      "coordinates": {
+        "lat": 38,
+        "lon": 23.7
+      },
+      "originalLanguage": "ancient Greek",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Odyssey",
+      "aliases": [
+        "odyssey",
+        "ඔඩිසි",
+        "ඔඩිසිය"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "iliad",
+      "originalWork": "The Iliad",
+      "creator": "Homer",
+      "historicalOrigin": "Ancient Greece",
+      "modernCountry": "Greece",
+      "coordinates": {
+        "lat": 38,
+        "lon": 23.7
+      },
+      "originalLanguage": "ancient Greek",
+      "sourceUrl": "https://www.wikidata.org/wiki/Q8275",
+      "aliases": [
+        "iliad",
+        "ඉලියඩ්",
+        "ඉලියඩ් කාව්‍යය"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "war-and-peace",
+      "originalWork": "War and Peace",
+      "creator": "Leo Tolstoy",
+      "historicalOrigin": "Russian Empire",
+      "modernCountry": "Russia",
+      "coordinates": {
+        "lat": 55.75,
+        "lon": 37.62
+      },
+      "originalLanguage": "Russian",
+      "sourceUrl": "https://www.wikidata.org/wiki/Q161531",
+      "aliases": [
+        "war and peace",
+        "යුද්ධය හා සාමය"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "lord-of-the-rings",
+      "originalWork": "The Lord of the Rings",
+      "creator": "J. R. R. Tolkien",
+      "historicalOrigin": "United Kingdom",
+      "modernCountry": "United Kingdom",
+      "coordinates": {
+        "lat": 51.51,
+        "lon": -0.13
+      },
+      "originalLanguage": "English",
+      "sourceUrl": "https://www.wikidata.org/wiki/Q15228",
+      "aliases": [
+        "the lord of the rings",
+        "lord of the rings"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "jane-eyre",
+      "originalWork": "Jane Eyre",
+      "creator": "Charlotte Brontë",
+      "historicalOrigin": "United Kingdom",
+      "modernCountry": "United Kingdom",
+      "coordinates": {
+        "lat": 53.8,
+        "lon": -1.55
+      },
+      "originalLanguage": "English",
+      "sourceUrl": "https://www.wikidata.org/wiki/Q183883",
+      "aliases": [
+        "jane eyre",
+        "ජේන් අයර්"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "sherlock-adventures",
+      "originalWork": "The Adventures of Sherlock Holmes",
+      "creator": "Arthur Conan Doyle",
+      "historicalOrigin": "United Kingdom",
+      "modernCountry": "United Kingdom",
+      "coordinates": {
+        "lat": 51.51,
+        "lon": -0.13
+      },
+      "originalLanguage": "English",
+      "sourceUrl": "https://www.wikidata.org/wiki/Q157056",
+      "aliases": [
+        "the adventures of sherlock holmes",
+        "ෂර්ලොක් හෝම්ස්ගේ වික්‍රමයන්"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "crime-and-punishment",
+      "originalWork": "Crime and Punishment",
+      "creator": "Fyodor Dostoevsky",
+      "historicalOrigin": "Russian Empire",
+      "modernCountry": "Russia",
+      "coordinates": {
+        "lat": 59.93,
+        "lon": 30.31
+      },
+      "originalLanguage": "Russian",
+      "sourceUrl": "https://www.wikidata.org/wiki/Q161531",
+      "aliases": [
+        "crime and punishment",
+        "අපරාධය හා දඬුවම"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "tale-of-genji",
+      "originalWork": "The Tale of Genji",
+      "creator": "Murasaki Shikibu",
+      "historicalOrigin": "Heian Japan",
+      "modernCountry": "Japan",
+      "coordinates": {
+        "lat": 35.01,
+        "lon": 135.77
+      },
+      "originalLanguage": "Classical Japanese",
+      "sourceUrl": "https://en.wikipedia.org/wiki/The_Tale_of_Genji",
+      "aliases": [
+        "the tale of genji",
+        "genji monogatari"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "ramayana",
+      "originalWork": "Ramayana",
+      "creator": "Valmiki",
+      "historicalOrigin": "Ancient India",
+      "modernCountry": "India",
+      "coordinates": {
+        "lat": 25.6,
+        "lon": 85.1
+      },
+      "originalLanguage": "Sanskrit",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Ramayana",
+      "aliases": [
+        "ramayana",
+        "රාමායණය",
+        "රාමායණ"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "mahabharata",
+      "originalWork": "Mahabharata",
+      "creator": "Vyasa (traditionally attributed)",
+      "historicalOrigin": "Ancient India",
+      "modernCountry": "India",
+      "coordinates": {
+        "lat": 29.97,
+        "lon": 76.88
+      },
+      "originalLanguage": "Sanskrit",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Mahabharata",
+      "aliases": [
+        "mahabharata",
+        "මහාභාරතය"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "bhagavad-gita",
+      "originalWork": "Bhagavad Gita",
+      "creator": "Traditionally attributed to Vyasa",
+      "historicalOrigin": "Ancient India",
+      "modernCountry": "India",
+      "coordinates": {
+        "lat": 29.97,
+        "lon": 76.88
+      },
+      "originalLanguage": "Sanskrit",
+      "sourceUrl": "https://en.wikipedia.org/wiki/Bhagavad_Gita",
+      "aliases": [
+        "bhagavad gita",
+        "භගවත් ගීතාව",
+        "භගවද් ගීතාව"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    },
+    {
+      "workId": "don-quixote",
+      "originalWork": "Don Quixote",
+      "creator": "Miguel de Cervantes",
+      "historicalOrigin": "Early modern Spain",
+      "modernCountry": "Spain",
+      "coordinates": {
+        "lat": 40.42,
+        "lon": -3.7
+      },
+      "originalLanguage": "Spanish",
+      "sourceUrl": "https://www.wikidata.org/wiki/Q480",
+      "aliases": [
+        "don quixote",
+        "දොන් කිහොතේ"
+      ],
+      "reviewStatus": "candidate",
+      "confidence": "medium",
+      "matchPolicy": "exact-title-and-author",
+      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
+    }
+  ]
+}
