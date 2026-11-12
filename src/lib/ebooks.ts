@@ -40,7 +40,7 @@ async function liveRows():Promise<EbookRow[]> {
   if(!csv.includes("Ebook ID")) throw new Error("Ebook catalogue is private");
   return (parse(csv,{columns:true,bom:true,skip_empty_lines:true}) as Record<string,string>[]).map(r=>({
     id:r["Ebook ID"]||"",title:r["Title"]||"",author:r["Author / Creator"]||"",language:r["Language"]||"",
-    format:r["Format"]||"",category:r["Category"]||"",filename:r["Filename"]||"",driveLink:r["Google Drive Link"]||"",notes:r["Notes"]||""
+    format:r["Format"]||"",category:r["Category"]||"",filename:r["Filename"]||"",driveLink:r["Google Drive Link"]||"",notes:r["Notes"]||"",origin:r["Origin"]||r["Original Country"]||r["Country of Origin"]||""
   }));
 }
 export async function getEbooks():Promise<Book[]> {
