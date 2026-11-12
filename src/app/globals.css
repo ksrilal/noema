@@ -417,3 +417,17 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 @media(max-width:1050px){.discovery-room-wings{grid-template-columns:repeat(3,1fr)}.discovery-book-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:700px){.discovery-feature-grid{grid-template-columns:1fr}.discovery-room-wings{grid-template-columns:repeat(2,1fr)}.discovery-book-grid{grid-template-columns:1fr}.discovery-room,.discovery-panel{padding:14px;border-width:5px}.discovery-header{padding:17px}.discovery-tabs button{flex:1;justify-content:center}.discovery-world{height:260px}.discovery-world button span{display:none}.discovery-stars button{max-width:80px;font-size:8px}.discovery-arch{height:120px}}
 @media(prefers-reduced-motion:reduce){.discovery-room-wings button{transition:none!important}}
+
+/* Enchanted book reveal: layered pages and floating golden particles */
+.vs-enchanted-book:before{content:"";position:absolute;inset:9px 0 9px 0;border-radius:15px;background:repeating-linear-gradient(0deg,#e8d4b7 0 3px,#bfa586 4px 5px);transform:translateY(8px) scale(.98);box-shadow:0 20px 35px #0005;z-index:-1}
+.vs-enchanted-book.vs-open-book-visible{animation:vs-magical-lift .8s ease-out both}
+.vs-book-magic{position:absolute;inset:-55px;pointer-events:none;z-index:5;overflow:visible}
+.vs-book-magic i{position:absolute;color:#ffe0a1;font-style:normal;font-size:23px;text-shadow:0 0 14px #f8c16e,0 0 28px #c9a0f1;opacity:0}
+.vs-book-magic i:nth-child(1){left:10%;top:60%;animation:vs-magic-float 2.7s .1s infinite}
+.vs-book-magic i:nth-child(2){left:70%;top:70%;animation:vs-magic-float 3s .5s infinite}
+.vs-book-magic i:nth-child(3){left:45%;top:20%;animation:vs-magic-float 2.4s .9s infinite}
+.vs-book-magic i:nth-child(4){left:95%;top:38%;animation:vs-magic-float 3.3s 1.2s infinite}
+.vs-book-magic i:nth-child(5){left:20%;top:15%;animation:vs-magic-float 2.8s 1.6s infinite}
+@keyframes vs-magical-lift{0%{filter:drop-shadow(0 5px 5px #0008)}60%{filter:drop-shadow(0 35px 40px #d9ae7844)}100%{filter:drop-shadow(0 25px 30px #0008)}}
+@keyframes vs-magic-float{0%{opacity:0;transform:translateY(24px) scale(.5) rotate(0)}30%{opacity:.85}85%{opacity:.45}100%{opacity:0;transform:translateY(-65px) scale(1.25) rotate(130deg)}}
+@media(prefers-reduced-motion:reduce){.vs-enchanted-book.vs-open-book-visible,.vs-book-magic i{animation:none!important}}
