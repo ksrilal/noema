@@ -586,3 +586,21 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .origin-disclaimer{font-size:11px;line-height:1.7;color:var(--muted,#aaa);margin:18px 0}
 .origin-empty{padding:25px;text-align:center;color:var(--muted,#aaa)}
 @media(max-width:720px){.origin-map-layout{grid-template-columns:1fr}.origin-map-frame,.origin-map-frame iframe{min-height:300px}.origin-country-panel{max-height:230px}.origin-book-row{flex-direction:column}.origin-controls label{width:100%}.origin-controls input{width:100%}}
+
+/* NOEMA celestial literary atlas — full-world interactive pin map */
+.origin-celestial-map{position:relative;isolation:isolate;overflow:hidden;padding:32px 10px 42px;border:1px solid #997442;border-radius:24px;background:radial-gradient(ellipse at 50% 45%,#203044 0%,#101523 53%,#080c15 80%);box-shadow:inset 0 0 65px #000c,0 16px 48px #0006}
+.origin-celestial-map:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;background-image:radial-gradient(#d9c596 1px,transparent 1px),radial-gradient(#83e5ff 1px,transparent 1px);background-size:91px 83px,137px 113px;background-position:10px 16px,50px 35px}
+.origin-celestial-aura{position:absolute;inset:15% 6%;border-radius:50%;background:#0879aa44;filter:blur(50px);z-index:-1}
+.origin-world-svg{display:block;width:100%;max-width:1250px;height:auto;margin:auto;filter:drop-shadow(0 0 12px #05c6ff77)}
+.origin-pin{cursor:pointer;outline:none;transition:opacity .2s}
+.origin-pin:hover,.origin-pin:focus,.origin-pin.active{filter:drop-shadow(0 0 9px #ffe8a0)}
+.origin-pin.active>circle:first-child{fill:#ffb74b;opacity:.65}
+.origin-map-corner{text-align:center;color:#e8c58c;font-family:Georgia,serif;letter-spacing:.2em;font-size:clamp(10px,1.3vw,16px);margin-top:4px}
+.origin-map-legend{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;color:#d5bd9b;font-size:11px;margin-top:14px}
+.origin-map-warning{text-align:center;color:#f1c99a;font-size:11px;margin-top:10px}
+.origin-map-selection{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 2px}
+.origin-map-selection>div{display:flex;flex-direction:column;gap:4px}
+.origin-map-selection strong{font-family:Georgia,serif;font-size:20px}
+.origin-map-selection small{color:var(--muted,#aaa);font-size:12px}
+.origin-map-selection button{border:1px solid #bfa36c;border-radius:8px;background:transparent;color:inherit;padding:8px 12px;cursor:pointer}
+@media(max-width:640px){.origin-celestial-map{padding:15px 4px 20px;border-radius:14px}.origin-map-legend{font-size:9px}.origin-map-corner{letter-spacing:.08em}.origin-map-selection{flex-direction:column;align-items:flex-start}}
