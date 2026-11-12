@@ -307,3 +307,9 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 @media(min-width:850px){
   .vs-shelf-viewport .vs-spine{flex-shrink:1;min-width:20px}
 }
+
+/* Taller cabinet shelves and slimmer spines for more natural book proportions. */
+.vs-shelf-viewport{min-height:245px}
+.vs-shelf-viewport .vs-spine{height:calc(var(--book-height) * 1.22);flex-grow:1;min-width:0}
+@media(min-width:850px){.vs-shelf-viewport .vs-spine{max-width:44px;flex-shrink:0}.vs-shelf-viewport .vs-shelf-books{justify-content:space-between}}
+@media(max-width:849px){.vs-shelf-viewport .vs-shelf-books{width:max-content;min-width:max-content}}
