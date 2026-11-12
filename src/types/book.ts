@@ -22,4 +22,4 @@ export interface Book {
   format?: string;
 }
 
-export type LibraryView = "home" | "overview" | "catalogue" | "rack" | "ebooks" | "collection" | "insights" | "authors";
+export type LibraryView = "home" | "explore" | "overview" | "catalogue" | "rack" | "ebooks" | "collection" | "insights" | "authors";
