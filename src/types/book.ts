@@ -11,6 +11,7 @@ export interface Book {
   subject: string;
   medium: string;
   language: string;
+  origin?: string;
   availability: Availability;
   availabilityReason: string;
   borrowedBy: string;
