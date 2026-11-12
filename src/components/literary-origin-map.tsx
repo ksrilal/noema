@@ -3,7 +3,7 @@ import {useEffect,useMemo,useState} from "react";
 import {ArrowRight,BookOpen,ExternalLink,MapPinned,Search,ShieldCheck,ShieldAlert} from "lucide-react";
 import type {Book} from "@/types/book";
 import registry from "@/data/origin-registry.json";
-import { CelestialGlobe } from "@/components/celestial-globe";
+import { FlatLiteraryMap } from "@/components/flat-literary-map";
 type Origin={workId:string;originalWork:string;creator:string;historicalOrigin:string;modernCountry:string;coordinates:{lat:number;lon:number};originalLanguage:string;sourceUrl:string;aliases:string[];reviewStatus:string;confidence:string;matchPolicy:string;note:string};
 const candidates=registry.workCandidates as Origin[];
 
@@ -38,7 +38,7 @@ export function LiteraryOriginMap({books,onBook}:{books:Book[];onBook:(b:Book)=>
  return <section className="origin-atlas"><header className="origin-atlas-header"><span className="section-kicker">NOEMA · ORIGINAL LITERARY ORIGINS</span><h3>Where stories were first born</h3><p>Origins refer to original works, not the language or country of your translation. The modern map location is a geographic reference, never a claim about an exact composition site.</p></header>
  <div className="origin-summary"><span><ShieldCheck size={16}/> {verified.length} verified catalogue matches</span><span><ShieldAlert size={16}/> {suggested.length} suggestions awaiting review</span><span><Search size={16}/> {unresolved.length} unresolved ({unmappedOrigins.length} with unrecognized origin labels)</span></div>
 
- <CelestialGlobe pins={countries.map(([name,data])=>({name,lat:data.origin.coordinates.lat,lon:data.origin.coordinates.lon,count:data.verified.length+data.suggested.length,suggested:data.verified.length===0}))} selected={selected} onSelect={setSelected}/>
+ <FlatLiteraryMap pins={countries.map(([name,data])=>({name,lat:data.origin.coordinates.lat,lon:data.origin.coordinates.lon,count:data.verified.length+data.suggested.length,suggested:data.verified.length===0}))} selected={selected} onSelect={setSelected}/>
  <div className="origin-map-selection"><div><strong>{selected||"All literary origins"}</strong><small>{selected?"Books from this origin are listed below.":"Select a glowing pin to explore its books, or view all mapped books below."}</small></div>{selected?<button type="button" onClick={()=>setSelected(null)}>Show all origins</button>:null}</div>
 
  <div className="origin-controls"><div className="origin-filter-tabs" aria-label="Origin review status">{([{id:"all",name:"All mapped"},{id:"verified",name:"Verified"},{id:"suggested",name:"Needs review"},{id:"unresolved",name:"Unresolved"}] as const).map(t=><button type="button" key={t.id} aria-pressed={filter===t.id} onClick={()=>setFilter(t.id)}>{t.name}</button>)}</div><label><Search size={16}/><input aria-label="Search original literary origins" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search title, author, original work…"/></label></div>
