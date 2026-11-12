@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  Activity, ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, BookCopy,
+  Compass, Activity, ArrowDownRight, ArrowRight, ArrowUpRight, BarChart3, BookCopy,
   BookMarked, BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight,
   CircleHelp, Filter, LayoutDashboard, LibraryBig, Menu, Search, SlidersHorizontal,
   Sparkles, UsersRound, X, Grid2X2, List, Sun, Moon, Monitor, ExternalLink, Maximize2, Minimize2,
@@ -14,12 +14,14 @@ import {
 import type { Book, LibraryView } from "@/types/book";
 import { literaryQuotes } from "@/data/quotes";
 import { VirtualBookshelf } from "@/components/virtual-bookshelf";
+import { DiscoveryHub } from "@/components/discovery-hub";
 
 const COLORS = ["#8B78E6", "#56B6A6", "#D99B6C", "#719DE2", "#C27DAE", "#A4B96C", "#D3B565", "#8C9EBD"];
 const PAGE_SIZE = 12;
 const nav: { id: LibraryView; label: string; icon: typeof BookOpen }[] = [
   { id: "home", label: "Home", icon: Sparkles },
   { id: "catalogue", label: "Books", icon: BookOpen },
+  { id: "explore", label: "Explore", icon: Compass },
   { id: "rack", label: "Book Rack", icon: LibraryBig },
   { id: "ebooks", label: "Ebooks", icon: BookMarked },
 ];
@@ -192,7 +194,7 @@ export function LibraryClient({ books, ebooks = [], error }: { books: Book[]; eb
   const quote = literaryQuotes[quoteIndex % literaryQuotes.length];
   const quoteBook = allBooks.find(book => book.id === quote.bookId);
   const nextQuote = () => setQuoteIndex(index => (index + 1 + Math.floor(Math.random() * (literaryQuotes.length - 1))) % literaryQuotes.length);
-  const subtitle = ({ rack: "Your physical collection and its stories.", ebooks: "Your digital shelves, ready to explore.", home: "A place where every page opens a new world.", overview: "A living portrait of your personal library.", catalogue: "Every format, one thoughtful collection.", insights: "Discover the patterns behind your collection.", collection: "Explore every volume in this collection.", authors: "The voices that shape your shelves." } as Record<LibraryView, string>)[view];
+  const subtitle = ({ explore: "A world of books, ideas, and discoveries.", rack: "Your physical collection and its stories.", ebooks: "Your digital shelves, ready to explore.", home: "A place where every page opens a new world.", overview: "A living portrait of your personal library.", catalogue: "Every format, one thoughtful collection.", insights: "Discover the patterns behind your collection.", collection: "Explore every volume in this collection.", authors: "The voices that shape your shelves." } as Record<LibraryView, string>)[view];
 
   return <div className="app-shell">
     <aside className={"sidebar " + (sidebarOpen ? "sidebar-open" : "")}>
@@ -205,7 +207,8 @@ export function LibraryClient({ books, ebooks = [], error }: { books: Book[]; eb
     <main className="main">
       <header className="topbar"><button className="menu-toggle icon-button" aria-label="Open navigation" onClick={() => setSidebarOpen(true)}><Menu size={22}/></button><div className="breadcrumb">Collection <ChevronRight size={14}/><span>{["collection","overview","insights","authors"].includes(view) ? (section === "rack" ? "Book Rack" : "Ebooks") + " / " + sectionNav.find(n=>n.id===view)?.label : nav.find((n) => n.id === view)?.label}</span></div><div className="topbar-right"><div className="theme-control"><button type="button" className="theme-trigger" aria-label="Select color theme" aria-expanded={themeMenuOpen} onClick={() => setThemeMenuOpen(!themeMenuOpen)}>{theme === "light" ? <Sun size={18}/> : theme === "dark" ? <Moon size={18}/> : <Monitor size={18}/>}<span>{theme === "system" ? "System" : theme === "dark" ? "Dark" : "Light"}</span><ChevronDown size={14}/></button>{themeMenuOpen ? <div className="theme-menu" role="group" aria-label="Color theme">{([["system","System",Monitor],["light","Light",Sun],["dark","Dark",Moon]] as const).map(([value,label,Icon])=><button type="button" key={value} className={theme === value ? "theme-option selected" : "theme-option"} onClick={()=>{setTheme(value);setThemeMenuOpen(false);}}><Icon size={16}/>{label}{theme === value ? <Check size={14}/> : null}</button>)}</div> : null}</div><div className="avatar">L</div></div></header>
       <div className="page">
-        <div className="intro"><div><div className="eyebrow"><span className="eyebrow-line"/> THE ART OF COLLECTING KNOWLEDGE</div><h1>{view === "home" ? <>Where words <em>remain.</em></> : view === "overview" ? <>{section === "rack" ? "Book Rack" : "Ebooks"} <em>overview.</em></> : view === "catalogue" ? <>All <em>books.</em></> : view === "collection" ? <>{section === "rack" ? "Book Rack" : "Ebooks"} <em>collection.</em></> : view === "rack" ? <>Your <em>book rack.</em></> : view === "ebooks" ? <>Digital <em>library.</em></> : view === "insights" ? <>{section === "rack" ? "Book Rack" : "Ebooks"} <em>insights.</em></> : <>{section === "rack" ? "Book Rack" : "Ebooks"} <em>authors.</em></>}</h1><p>{subtitle}</p></div><div className="intro-mark"><LibraryBig size={28} strokeWidth={1.2}/></div></div>
+        <div className="intro"><div><div className="eyebrow"><span className="eyebrow-line"/> THE ART OF COLLECTING KNOWLEDGE</div><h1>{view === "explore" ? <DiscoveryHub books={allBooks} onBook={setSelected} onShelf={(term)=>{chooseView("catalogue");setQuery(term);}}/> : null}
+        {view === "home" ? <>Where words <em>remain.</em></> : view === "overview" ? <>{section === "rack" ? "Book Rack" : "Ebooks"} <em>overview.</em></> : view === "explore" ? <>Literary <em>world.</em></> : view === "catalogue" ? <>All <em>books.</em></> : view === "collection" ? <>{section === "rack" ? "Book Rack" : "Ebooks"} <em>collection.</em></> : view === "rack" ? <>Your <em>book rack.</em></> : view === "ebooks" ? <>Digital <em>library.</em></> : view === "insights" ? <>{section === "rack" ? "Book Rack" : "Ebooks"} <em>insights.</em></> : <>{section === "rack" ? "Book Rack" : "Ebooks"} <em>authors.</em></>}</h1><p>{subtitle}</p></div><div className="intro-mark"><LibraryBig size={28} strokeWidth={1.2}/></div></div>
         {error ? <div role="alert" className="setup-notice"><CircleHelp size={21}/><div><strong>Your collection is temporarily unavailable</strong><p>Please try again later.</p></div></div> : null}
         {view !== "home" ? <section className="filter-panel" aria-label="Library filters">
           <div className="search-wrap"><Search size={18}/><input aria-label="Search books" placeholder="Search title, author, translator, editor or book ID…" value={query} onChange={(e) => { setQuery(e.target.value); setPage(1); }}/></div>
