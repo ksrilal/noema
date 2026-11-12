@@ -629,3 +629,7 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .origin-flat-caption{text-align:center;margin-top:13px;font-family:Georgia,serif;color:#e6c48b;letter-spacing:.14em;font-size:clamp(12px,1.5vw,17px)}
 .origin-flat-note{text-align:center;color:#b9b1a6;font-size:11px;margin-top:8px}
 @media(max-width:650px){.origin-flat-shell{padding:7px 5px 14px}.origin-flat-controls{right:8px;top:10px}.origin-flat-controls button{width:29px;height:29px}.origin-flat-caption{letter-spacing:.04em}}
+
+.origin-flat-viewport{touch-action:none;cursor:grab;user-select:none}
+.origin-flat-viewport:active{cursor:grabbing}
+.origin-flat-viewport svg{transition:none}
