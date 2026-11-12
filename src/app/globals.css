@@ -313,3 +313,10 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .vs-shelf-viewport .vs-spine{height:calc(var(--book-height) * 1.22);flex-grow:1;min-width:0}
 @media(min-width:850px){.vs-shelf-viewport .vs-spine{max-width:44px;flex-shrink:0}.vs-shelf-viewport .vs-shelf-books{justify-content:space-between}}
 @media(max-width:849px){.vs-shelf-viewport .vs-shelf-books{width:max-content;min-width:max-content}}
+
+/* Focused shelf: 100% fills the viewport, higher zoom increases actual scrollable width. */
+.vs-focused-scroll{width:100%;overflow-x:auto;overflow-y:hidden;align-items:flex-end}
+.vs-focused-books{width:max(100%,calc(100% * var(--shelf-zoom,1)));min-width:max(100%,calc(100% * var(--shelf-zoom,1)));max-width:none;box-sizing:border-box;transform:none!important;gap:3px;transition:width .25s ease,min-width .25s ease}
+.vs-focused-books .vs-spine{flex:1 1 0;min-width:0;max-width:none;width:auto;height:calc(var(--book-height) * 1.4 * var(--shelf-zoom,1));transition:height .25s ease,transform .22s ease,filter .22s ease}
+.vs-focused-books .vs-spine-title{font-size:calc(12px * var(--shelf-zoom,1))}
+@media(max-width:700px){.vs-focused-books{width:max(760px,calc(760px * var(--shelf-zoom,1)));min-width:max(760px,calc(760px * var(--shelf-zoom,1)))}}
