@@ -26,6 +26,7 @@ function normalize(rows: SheetRow[]): Book[] {
       subject: String(row["Subject"] || "").trim(),
       medium: String(row["Medium"] || "").trim(),
       language: String(row["Language"] || "Unspecified").trim(),
+      origin: String(row["Origin"] || row["Original Country"] || row["Country of Origin"] || "").trim(),
       availability: String(row["Availability"] || "Unknown").trim(),
       availabilityReason: String(row["Availability Reason"] || "").trim(),
       borrowedBy: String(row["Borrowed By"] || "").trim(),
@@ -53,7 +54,7 @@ async function readPrivateSheet(): Promise<Book[]> {
   });
   const { token } = await client.getAccessToken();
   if (!token) throw new Error("Unable to authenticate Google Sheets access");
-  const range = encodeURIComponent("'" + SHEET_TAB.replace(/'/g, "''") + "'!A1:P");
+  const range = encodeURIComponent("'" + SHEET_TAB.replace(/'/g, "''") + "'!A1:ZZ");
   const url = "https://sheets.googleapis.com/v4/spreadsheets/" + encodeURIComponent(SHEET_ID) + "/values/" + range;
   const response = await fetch(url, {
     headers: { Authorization: "Bearer " + token },
