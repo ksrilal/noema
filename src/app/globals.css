@@ -320,3 +320,27 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .vs-focused-books .vs-spine{flex:1 1 0;min-width:0;max-width:none;width:auto;height:calc(var(--book-height) * 1.4 * var(--shelf-zoom,1));transition:height .25s ease,transform .22s ease,filter .22s ease}
 .vs-focused-books .vs-spine-title{font-size:calc(12px * var(--shelf-zoom,1))}
 @media(max-width:700px){.vs-focused-books{width:max(760px,calc(760px * var(--shelf-zoom,1)));min-width:max(760px,calc(760px * var(--shelf-zoom,1)))}}
+
+/* Search assistant: animated, CSS-drawn librarian and matching book picker */
+.vs-librarian-panel{display:grid;grid-template-columns:125px minmax(0,1fr);gap:20px;align-items:center;margin:0 0 24px;padding:22px;border:1px solid #b99b714d;border-radius:17px;background:linear-gradient(110deg,#2e2733,#46352f);color:#f4e4cb;box-shadow:0 10px 25px #0002;overflow:hidden;animation:vs-librarian-enter .5s ease both}
+.vs-librarian-content{min-width:0}.vs-librarian-content h3{font-family:Georgia,serif;font-size:20px;margin:8px 0}.vs-librarian-content p{font-size:12px;color:#d9c7b5;margin:0 0 12px}
+.vs-librarian-character{position:relative;width:100px;height:150px;margin:auto;animation:vs-librarian-walk 1.3s ease-in-out 2}
+.vs-librarian-hat{position:absolute;top:3px;left:29px;width:45px;height:25px;background:#554363;border-radius:14px 14px 3px 3px;border-bottom:7px solid #b7a27d;z-index:3}
+.vs-librarian-face{position:absolute;top:27px;left:29px;width:45px;height:49px;border-radius:45% 45% 47% 47%;background:#d9ae8e;border:3px solid #745b51;z-index:2}
+.vs-librarian-face i{position:absolute;top:19px;width:5px;height:5px;border-radius:50%;background:#392e33}.vs-librarian-face i:first-child{left:10px}.vs-librarian-face i:nth-child(2){right:10px}
+.vs-librarian-face b{position:absolute;bottom:10px;left:16px;width:10px;height:4px;border-bottom:2px solid #704b46;border-radius:50%}
+.vs-librarian-body{position:absolute;top:73px;left:18px;width:67px;height:73px;background:linear-gradient(90deg,#45364f,#77617e);border-radius:18px 18px 5px 5px;border:2px solid #a18a92}
+.vs-librarian-body i{position:absolute;left:29px;top:0;width:9px;height:50px;background:#d4b690;clip-path:polygon(50% 0,100% 20%,50% 100%,0 20%)}
+.vs-librarian-arm{position:absolute;top:83px;right:0;width:20px;height:56px;background:#67516f;border-radius:12px;transform:rotate(-25deg);transform-origin:top center;animation:vs-librarian-wave 1.4s ease-in-out infinite}
+.vs-librarian-book{position:absolute;top:105px;right:-6px;font-size:28px;color:#f0d4a4;transform:rotate(-15deg)}
+.vs-librarian-fetching .vs-librarian-character{animation:vs-librarian-fetch .85s ease-in-out both}
+.vs-librarian-results{display:flex;gap:8px;overflow-x:auto;padding:3px 0 9px;scrollbar-width:thin}
+.vs-librarian-results button{flex:0 0 190px;min-width:0;display:flex;align-items:flex-start;gap:8px;text-align:left;background:#ffffff12;border:1px solid #f1dcb938;border-radius:10px;color:#f6e9d7;padding:10px;cursor:pointer}
+.vs-librarian-results button:hover,.vs-librarian-results button:focus-visible{background:#ffffff25;border-color:#e4c58e}
+.vs-librarian-results button span{display:flex;flex-direction:column;gap:5px;min-width:0}.vs-librarian-results strong{font-size:12px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.vs-librarian-results small,.vs-librarian-more{font-size:10px;color:#cfbda8}
+@keyframes vs-librarian-enter{from{opacity:0;transform:translateX(-35px)}to{opacity:1;transform:translateX(0)}}
+@keyframes vs-librarian-walk{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-7px) rotate(-3deg)}75%{transform:translateY(-4px) rotate(3deg)}}
+@keyframes vs-librarian-wave{0%,100%{transform:rotate(-25deg)}50%{transform:rotate(-55deg)}}
+@keyframes vs-librarian-fetch{0%{transform:translateX(0) scale(1)}45%{transform:translateX(25px) scale(.9)}100%{transform:translateX(0) scale(1.05)}}
+@media(max-width:600px){.vs-librarian-panel{grid-template-columns:70px minmax(0,1fr);gap:10px;padding:12px}.vs-librarian-character{transform:scale(.68);transform-origin:center}.vs-librarian-content h3{font-size:16px}.vs-librarian-results button{flex-basis:155px}}
+@media(prefers-reduced-motion:reduce){.vs-librarian-panel,.vs-librarian-character,.vs-librarian-arm{animation:none!important}}
