@@ -116,6 +116,7 @@ export function LibraryClient({ books, ebooks = [], error }: { books: Book[]; eb
   const visibleBooks = view === "catalogue" ? allBooks : (view === "ebooks" || (["overview", "insights", "collection", "authors"].includes(view) && section === "ebooks")) ? ebooks : books;
   const [query, setQuery] = useState("");
   const [quoteIndex, setQuoteIndex] = useState(0);
+  const [heroArt, setHeroArt] = useState(0);
   const [category, setCategory] = useState("All categories");
   const [language, setLanguage] = useState("All languages");
   const [availability, setAvailability] = useState("All statuses");
@@ -125,7 +126,7 @@ export function LibraryClient({ books, ebooks = [], error }: { books: Book[]; eb
   const [catalogueMode, setCatalogueMode] = useState<"grid" | "list">("grid");
   const [theme, setTheme] = useState<"system" | "light" | "dark">("system");
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
-  useEffect(() => { setQuoteIndex(Math.floor(Math.random() * literaryQuotes.length)); }, []);
+  useEffect(() => { setQuoteIndex(Math.floor(Math.random() * literaryQuotes.length)); setHeroArt(Math.floor(Math.random() * 5)); }, []);
   useEffect(() => {
     const saved = window.localStorage.getItem("noema-theme");
     if (saved === "light" || saved === "dark" || saved === "system") setTheme(saved);
@@ -216,7 +217,7 @@ export function LibraryClient({ books, ebooks = [], error }: { books: Book[]; eb
         {view === "home" ? <>
           <section className={"literary-hero literary-"+quote.mood} aria-label="Featured literary quotation">
             <div className="literary-glow literary-glow-one"/><div className="literary-glow literary-glow-two"/>
-            <div className="literary-book-art" aria-hidden="true"><div className="literary-book-aura"/><div className="literary-floating-glyph glyph-one">✧</div><div className="literary-floating-glyph glyph-two">✦</div><div className="literary-floating-glyph glyph-three">·</div><div className="literary-book"><div className="literary-book-shadow"/><div className="literary-book-cover left-cover"/><div className="literary-book-cover right-cover"/><div className="literary-book-page page-left"/><div className="literary-book-page page-right"/><div className="literary-book-page page-turn-one"/><div className="literary-book-page page-turn-two"/><div className="literary-book-spine"/></div></div>
+            <div className={"literary-book-art hero-art-"+heroArt} aria-hidden="true"><div className="literary-book-aura"/><div className="literary-floating-glyph glyph-one">✧</div><div className="literary-floating-glyph glyph-two">✦</div><div className="literary-floating-glyph glyph-three">·</div>{heroArt === 0 ? <div className="literary-book"><div className="literary-book-shadow"/><div className="literary-book-cover left-cover"/><div className="literary-book-cover right-cover"/><div className="literary-book-page page-left"/><div className="literary-book-page page-right"/><div className="literary-book-page page-turn-one"/><div className="literary-book-page page-turn-two"/><div className="literary-book-spine"/></div> : heroArt === 1 ? <div className="hero-book-stack"><i/><i/><i/><i/><span className="hero-stack-spark">✧</span></div> : heroArt === 2 ? <div className="hero-quill-scene"><div className="hero-quill-feather"/><div className="hero-quill-stem"/><div className="hero-inkwell"/><div className="hero-inkwell-neck"/><div className="hero-inkwell-shine"/></div> : heroArt === 3 ? <div className="hero-orbit-scene"><div className="hero-orbit-ring orbit-ring-one"/><div className="hero-orbit-ring orbit-ring-two"/><div className="hero-orbit-center"><BookOpen size={68} strokeWidth={1.15}/></div><div className="hero-orbit-star orbit-star-one">✦</div><div className="hero-orbit-star orbit-star-two">✧</div></div> : <div className="hero-scroll-scene"><div className="hero-scroll-paper"><span/><span/><span/><span/><span/></div><div className="hero-scroll-roller roller-top"/><div className="hero-scroll-roller roller-bottom"/><div className="hero-scroll-seal">✦</div></div>}</div>
             <div className="literary-hero-inner">
               <div className="literary-eyebrow">WORDS FROM YOUR COLLECTION</div>
               
