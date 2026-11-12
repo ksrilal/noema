@@ -27,28 +27,6 @@
       "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
     },
     {
-      "workId": "iliad",
-      "originalWork": "The Iliad",
-      "creator": "Homer",
-      "historicalOrigin": "Ancient Greece",
-      "modernCountry": "Greece",
-      "coordinates": {
-        "lat": 38,
-        "lon": 23.7
-      },
-      "originalLanguage": "ancient Greek",
-      "sourceUrl": "https://www.wikidata.org/wiki/Q8275",
-      "aliases": [
-        "iliad",
-        "ඉලියඩ්",
-        "ඉලියඩ් කාව්‍යය"
-      ],
-      "reviewStatus": "candidate",
-      "confidence": "medium",
-      "matchPolicy": "exact-title-and-author",
-      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
-    },
-    {
       "workId": "war-and-peace",
       "originalWork": "War and Peace",
       "creator": "Leo Tolstoy",
@@ -84,69 +62,6 @@
       "aliases": [
         "the lord of the rings",
         "lord of the rings"
-      ],
-      "reviewStatus": "candidate",
-      "confidence": "medium",
-      "matchPolicy": "exact-title-and-author",
-      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
-    },
-    {
-      "workId": "jane-eyre",
-      "originalWork": "Jane Eyre",
-      "creator": "Charlotte Brontë",
-      "historicalOrigin": "United Kingdom",
-      "modernCountry": "United Kingdom",
-      "coordinates": {
-        "lat": 53.8,
-        "lon": -1.55
-      },
-      "originalLanguage": "English",
-      "sourceUrl": "https://www.wikidata.org/wiki/Q183883",
-      "aliases": [
-        "jane eyre",
-        "ජේන් අයර්"
-      ],
-      "reviewStatus": "candidate",
-      "confidence": "medium",
-      "matchPolicy": "exact-title-and-author",
-      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
-    },
-    {
-      "workId": "sherlock-adventures",
-      "originalWork": "The Adventures of Sherlock Holmes",
-      "creator": "Arthur Conan Doyle",
-      "historicalOrigin": "United Kingdom",
-      "modernCountry": "United Kingdom",
-      "coordinates": {
-        "lat": 51.51,
-        "lon": -0.13
-      },
-      "originalLanguage": "English",
-      "sourceUrl": "https://www.wikidata.org/wiki/Q157056",
-      "aliases": [
-        "the adventures of sherlock holmes",
-        "ෂර්ලොක් හෝම්ස්ගේ වික්‍රමයන්"
-      ],
-      "reviewStatus": "candidate",
-      "confidence": "medium",
-      "matchPolicy": "exact-title-and-author",
-      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
-    },
-    {
-      "workId": "crime-and-punishment",
-      "originalWork": "Crime and Punishment",
-      "creator": "Fyodor Dostoevsky",
-      "historicalOrigin": "Russian Empire",
-      "modernCountry": "Russia",
-      "coordinates": {
-        "lat": 59.93,
-        "lon": 30.31
-      },
-      "originalLanguage": "Russian",
-      "sourceUrl": "https://www.wikidata.org/wiki/Q161531",
-      "aliases": [
-        "crime and punishment",
-        "අපරාධය හා දඬුවම"
       ],
       "reviewStatus": "candidate",
       "confidence": "medium",
@@ -233,27 +148,6 @@
         "bhagavad gita",
         "භගවත් ගීතාව",
         "භගවද් ගීතාව"
-      ],
-      "reviewStatus": "candidate",
-      "confidence": "medium",
-      "matchPolicy": "exact-title-and-author",
-      "note": "Reference for the original work; catalogue edition must be reviewed before verification. Map coordinates are representative modern reference points, not composition sites."
-    },
-    {
-      "workId": "don-quixote",
-      "originalWork": "Don Quixote",
-      "creator": "Miguel de Cervantes",
-      "historicalOrigin": "Early modern Spain",
-      "modernCountry": "Spain",
-      "coordinates": {
-        "lat": 40.42,
-        "lon": -3.7
-      },
-      "originalLanguage": "Spanish",
-      "sourceUrl": "https://www.wikidata.org/wiki/Q480",
-      "aliases": [
-        "don quixote",
-        "දොන් කිහොතේ"
       ],
       "reviewStatus": "candidate",
       "confidence": "medium",
