@@ -633,3 +633,63 @@ body{font-family:'Inter','Noto Sans Sinhala',system-ui,sans-serif;background:var
 .origin-flat-viewport{touch-action:none;cursor:grab;user-select:none}
 .origin-flat-viewport:active{cursor:grabbing}
 .origin-flat-viewport svg{transition:none}
+
+/* Literary Connections Lab */
+.connections-lab{padding:28px;border:1px solid #92754f70;border-radius:18px;background:radial-gradient(ellipse at 50% 10%,#32273d,#181525 65%);color:#eee4f4}
+.connections-header h3{font:normal clamp(26px,3vw,42px) Georgia,serif;color:#f6e0ad;margin:9px 0}
+.connections-header p{max-width:800px;color:#c7b9ce;line-height:1.7}
+.connections-toolbar{display:flex;gap:12px;margin:24px 0;flex-wrap:wrap}
+.connections-toolbar label{display:flex;align-items:center;gap:10px;flex:1;min-width:220px;background:#151328;border:1px solid #8f7b9e88;border-radius:10px;padding:11px}
+.connections-toolbar input{border:0;outline:0;background:transparent;color:#fff;width:100%;font-size:13px}
+.connections-toolbar button,.connections-focus button,.connections-trail-detail button,.connections-secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #b29cce88;border-radius:10px;padding:11px 15px;background:#655080;color:white;cursor:pointer}
+.connections-search-results{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin:-14px 0 20px}
+.connections-search-results button{border:1px solid #8d769777;background:#282137;color:#eee4f4;border-radius:8px;padding:10px;text-align:left;cursor:pointer;font-size:12px}
+.connections-search-results small{display:block;margin-top:4px;color:#b8a8bf}
+.connections-mode{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid #9b7f9b66;padding-bottom:12px;margin:20px 0}
+.connections-mode button{display:flex;align-items:center;gap:7px;border:1px solid #9e8aaf55;border-radius:9px;padding:10px 12px;background:#241e35;color:#d8c9e3;cursor:pointer}
+.connections-mode button[aria-selected=true]{background:#705590;color:white;border-color:#c9a5f0}
+.connections-focus{padding:20px 24px;border:1px solid #b29cce66;border-radius:14px;background:linear-gradient(115deg,#322543,#3d3030)}
+.connections-focus>span{font-size:10px;letter-spacing:.18em;color:#c5a7ff}
+.connections-focus h4{font:normal 26px Georgia,serif;margin:9px 0;color:#f4dcaa}
+.connections-focus p{font-size:12px;color:#d2c4d6;margin-bottom:16px}
+.connections-depth{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin:22px 0 0;color:#c8b6d5;font-size:12px}
+.connections-depth input{accent-color:#b49add;flex:1;min-width:100px}
+.connections-orbit{border:1px solid #8b719066;border-radius:16px;margin:15px 0;overflow:hidden;background:radial-gradient(ellipse at center,#302347,#141321 75%);background-image:radial-gradient(#c6b4e966 1px,transparent 1px),radial-gradient(ellipse at center,#302347,#141321 75%);background-size:72px 69px,auto}
+.connections-orbit svg{width:100%;display:block;max-height:600px}
+.connections-node{cursor:pointer;outline:none}
+.connections-node:hover,.connections-node:focus{filter:drop-shadow(0 0 12px #ffdda4)}
+.connections-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px}
+.connections-cards button{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:7px;text-align:left;border:1px solid #a08caa66;background:#272037;color:#f1e8f3;border-radius:12px;padding:15px;cursor:pointer}
+.connections-cards button:hover{border-color:#d6b47c}
+.connections-cards strong{font-size:13px}
+.connections-cards small,.connections-cards em{font-size:11px;color:#c0b0cb;font-style:normal}
+.connections-score{font-size:11px;background:#705590;padding:4px 8px;border-radius:14px}
+.connections-cards button>svg{align-self:flex-end}
+.connections-compare{padding-top:20px}
+.connections-compare-controls label{display:flex;flex-direction:column;gap:8px;font-size:12px;color:#d9c4e5}
+.connections-compare select{width:100%;max-width:580px;background:#20192e;color:white;border:1px solid #a18ba9;border-radius:9px;padding:12px}
+.connections-compare-head{display:grid;grid-template-columns:1fr 150px 1fr;gap:12px;margin:22px 0;align-items:stretch}
+.connections-compare-head article,.connections-compare-score{background:#292139;border:1px solid #8b739b66;border-radius:12px;padding:18px;text-align:center}
+.connections-compare-head small{font-size:10px;color:#b69be3;letter-spacing:.14em}
+.connections-compare-head h4{font:normal 19px Georgia,serif;color:#f5dca6}
+.connections-compare-head span{font-size:11px;color:#cbb9d5}
+.connections-compare-score{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.connections-compare-score strong{font:normal 44px Georgia,serif;color:#f5dca6}
+.connections-dna{border:1px solid #8b739b66;border-radius:12px;overflow:hidden;margin-bottom:16px}
+.connections-dna>div{display:grid;grid-template-columns:1fr 135px 1fr;gap:12px;padding:13px;border-bottom:1px solid #8b739b44;font-size:12px;align-items:center}
+.connections-dna>div:last-child{border:0}
+.connections-dna>div span:last-child{text-align:right}
+.connections-dna strong{text-align:center;color:#e3c18b;font-size:11px}
+.connections-explain,.connections-footer{color:#bcaec8;font-size:12px;line-height:1.7}
+.connections-trail{margin-top:20px}
+.connections-trail-steps{display:flex;overflow:auto;gap:8px;padding-bottom:12px}
+.connections-trail-steps button{min-width:140px;max-width:190px;flex:1;border:1px solid #937e9f;background:#282037;color:#e9d8ef;border-radius:10px;padding:12px;cursor:pointer;text-align:left}
+.connections-trail-steps button.active{border-color:#e6c78b;background:#5a426c}
+.connections-trail-steps span{display:block;font-size:11px;color:#e2c68e;margin-bottom:8px}
+.connections-trail-steps strong{font-size:12px}
+.connections-trail-detail{padding:26px;border:1px solid #9e87b366;border-radius:14px;background:#282038;margin-top:10px}
+.connections-trail-detail h4{font:normal 25px Georgia,serif;color:#f3dda9}
+.connections-trail-detail p{color:#c8b7d4;font-size:13px}
+.connections-trail-detail>div{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.connections-footer{border-top:1px solid #8b739b55;margin-top:28px;padding-top:16px}
+@media(max-width:700px){.connections-lab{padding:14px}.connections-compare-head{grid-template-columns:1fr}.connections-dna>div{grid-template-columns:1fr 85px 1fr;gap:5px;font-size:10px}.connections-dna strong{font-size:10px}.connections-orbit svg{min-height:310px}.connections-mode button{font-size:11px}}
