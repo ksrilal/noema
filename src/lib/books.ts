@@ -119,14 +119,14 @@ export async function getLibraryOrder(): Promise<string[]> {
       rows = ((await response.json()) as {values?: unknown[][]}).values || [];
     } else {
       const url = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(SHEET_ID) +
-        "/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent(tab);
+        "/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent(tab) + "&gid=1204291891";
       const response = await fetch(url, {cache: "no-store"});
       if (!response.ok) throw new Error("Public Library Order returned " + response.status);
       rows = parse(await response.text(), {bom: true, skip_empty_lines: true}) as unknown[][];
     }
-    if (String(rows[0]?.[0] || "").trim() !== "Book ID") throw new Error("Library Order Book ID header missing");
+    if (String(rows[0]?.[0] || "").replace(/\uFEFF/g, "").trim() !== "Book ID") throw new Error("Library Order Book ID header missing");
     const seen = new Set<string>();
-    return rows.slice(1).map(row => String(row[0] || "").trim()).filter(id => {
+    return rows.slice(1).map(row => String(row[0] || "").trim().toUpperCase()).filter(id => {
       if (!id || seen.has(id)) return false;
       seen.add(id);
       return true;
