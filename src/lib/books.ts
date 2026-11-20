@@ -92,3 +92,47 @@ export async function getBooks(): Promise<{ books: Book[]; error: string | null 
     };
   }
 }
+
+/** The Library Order tab's physical row sequence is the sole rack-order authority.
+ * Only the Book ID column is used; duplicate and blank IDs are ignored.
+ * Fail open: the original Books-sheet order remains available if this tab cannot be read.
+ */
+export async function getLibraryOrder(): Promise<string[]> {
+  const tab = "Library Order";
+  try {
+    const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+    const rawKey = process.env.GOOGLE_PRIVATE_KEY;
+    let rows: unknown[][];
+    if (email && rawKey) {
+      const client = new JWT({
+        email, key: rawKey.replace(/\\n/g, "\n"),
+        scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+      });
+      const { token } = await client.getAccessToken();
+      if (!token) throw new Error("Unable to authenticate Library Order");
+      const range = encodeURIComponent("'" + tab + "'!A1:A");
+      const response = await fetch("https://sheets.googleapis.com/v4/spreadsheets/" +
+        encodeURIComponent(SHEET_ID) + "/values/" + range, {
+          headers: { Authorization: "Bearer " + token }, cache: "no-store",
+        });
+      if (!response.ok) throw new Error("Library Order API returned " + response.status);
+      rows = ((await response.json()) as {values?: unknown[][]}).values || [];
+    } else {
+      const url = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(SHEET_ID) +
+        "/gviz/tq?tqx=out:csv&sheet=" + encodeURIComponent(tab);
+      const response = await fetch(url, {cache: "no-store"});
+      if (!response.ok) throw new Error("Public Library Order returned " + response.status);
+      rows = parse(await response.text(), {bom: true, skip_empty_lines: true}) as unknown[][];
+    }
+    if (String(rows[0]?.[0] || "").trim() !== "Book ID") throw new Error("Library Order Book ID header missing");
+    const seen = new Set<string>();
+    return rows.slice(1).map(row => String(row[0] || "").trim()).filter(id => {
+      if (!id || seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+  } catch (error) {
+    console.error("[Noema] Library Order read failed:", error instanceof Error ? error.message : "Unknown error");
+    return [];
+  }
+}
